@@ -11,8 +11,6 @@ dotenv.config();
 
 const configFilePath = process.env.CONFIG_FILE_PATH || 'config.json';
 
-console.log(`Using config file: ${configFilePath}`);
-
 const fullConfigPath = path.resolve(__dirname, '..', configFilePath);
 
 if (!fs.existsSync(fullConfigPath)) {
@@ -21,7 +19,7 @@ if (!fs.existsSync(fullConfigPath)) {
 
 const config = require(fullConfigPath);
 
-const typedConfig: Config = config as Config;
+export const typedConfig: Config = config as Config;
 
 const interval = Math.max(typedConfig.update_interval || 30, 30) * 1000;
 
@@ -29,6 +27,8 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 client.once('ready', () => {
     console.log('Bot is online!');
+
+    typedConfig.servers
 
     typedConfig.servers.forEach(server => {
         if (!server.message_id) {

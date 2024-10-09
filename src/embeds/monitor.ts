@@ -5,22 +5,7 @@ import {CombinedServer} from "../types/ServerDto";
 import path from "path";
 import fs from "fs";
 import {CustomEmbed} from "../types/CustomEmbed";
-import * as dotenv from "dotenv";
-import {Config} from "../types/Config";
-
-dotenv.config();
-
-const configFilePath = process.env.CONFIG_FILE_PATH || 'config.json'; // Установить путь по умолчанию, если переменной нет
-
-const fullConfigPath = path.resolve(__dirname, '../..', configFilePath);
-
-if (!fs.existsSync(fullConfigPath)) {
-    throw new Error(`Config file not found at path: ${fullConfigPath}`);
-}
-
-const config = require(fullConfigPath);
-
-const typedConfig: Config = config as Config;
+import {typedConfig} from "../index";
 
 export function createEmbed(server: CombinedServer): CustomEmbed {
     const formattedDate = getFormattedDate(typedConfig.locale);
@@ -38,7 +23,7 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
         log('Map is not defined');
     }
 
-    if (!server.players || server.players === '') {
+    if (!server.players) {
         log('Players is not defined or empty');
     }
 
@@ -46,22 +31,22 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
         .setColor(hexToColorResolvable(server.status == 'ONLINE' ? server.color : '#FF0000'))
         .addFields(
             {
-                name: `**${translate(config.locale, 'status')}**`,
+                name: `**${translate('status')}**`,
                 value: `\`\`\`fix\n${server.status}\`\`\``,
                 inline: false
             },
             {
-                name: `**${translate(config.locale, 'map')}**`,
+                name: `**${translate('map')}**`,
                 value: `\`\`\`fix\n${server.map}\`\`\``,
                 inline: true
             },
             {
-                name: `**${translate(config.locale, 'players')}**`,
-                value: `\`\`\`m1\n${server.players}\`\`\``,
+                name: `**${translate('players')}**`,
+                value: `\`\`\`ml\n${server.players.length} / ${server.maxPlayers} \`\`\``,
                 inline: true
             },
             {
-                name: `**${translate(config.locale, 'connect')}**`,
+                name: `**${translate('connect')}**`,
                 value: `\`\`\`fix\n${server.ip_port}\`\`\``,
                 inline: false
             }
@@ -95,9 +80,9 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     }
 
     if (server.footer?.icon && isValidUrl(server.footer.icon)) {
-        embed.setFooter({text: `${translate(config.locale, 'last_update')} ${formattedDate}`, iconURL: server.footer.icon});
+        embed.setFooter({text: `${translate('last_update')} ${formattedDate}`, iconURL: server.footer.icon});
     } else {
-        embed.setFooter({text: `${translate(config.locale, 'last_update')} ${formattedDate}`});
+        embed.setFooter({text: `${translate('last_update')} ${formattedDate}`});
     }
 
 
@@ -105,7 +90,7 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
 
     if (server.buttons?.connect && server.buttons.connect.active && server.buttons.connect.url && isValidUrl(server.buttons.connect.url)) {
         const connectButton = new ButtonBuilder()
-            .setLabel(translate(config.locale, 'connect'))
+            .setLabel(translate('connect'))
             .setStyle(ButtonStyle.Link)
             .setURL(server.buttons.connect.url);
         buttons.addComponents(connectButton);

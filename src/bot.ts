@@ -45,22 +45,13 @@ export async function sendMessage(client: Client, server: Server, channelId: str
             messageId = message.id;
         }
 
-        if (embed.attachment != null) {
-            const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment]});
-
-        } else {
-            const message = await channel.send({embeds: [embed.embedBuilder]});
-            server.message_id = message.id;
-            updateConfig(server);
-        }
-
         if (messageId) {
             server.message_id = messageId;
             updateConfig(server);
         }
 
     } else {
-        log('Server is not available');
+        log('Server is not available and not found cache data');
     }
 }
 
@@ -103,9 +94,12 @@ export async function updateMessage(client: Client, server: Server, channelId: s
             } else {
                 await message.edit({embeds: [embed.embedBuilder]});
             }
-        } catch
-            (error) {
-            console.log('Error fetching or updating message:', error);
+        } catch (error) {
+            log('Error fetching or updating message:', error);
+            log('Try to send new message');
+            sendMessage(client, server, channelId);
         }
+    } else {
+        log('Server is not available and not found cache data');
     }
 }
