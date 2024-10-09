@@ -1,0 +1,23 @@
+{
+    "debug": false,
+    "bot_token": "BOT_TOKEN",
+    "update_interval": 60,
+    "use_plugin": false,
+    "locale": "en-US",
+    "chanel_id": "",
+    "servers": [
+        {
+            "server_name": "",
+            "url": "",
+            "message_id": "",
+            "color": "#FFFFFF",
+            "connect_link": "127.0.0.1:27015",
+            "image_author": "",
+            "image_thumbnail": "",
+            "image_map": "",
+            "footer": {
+                "icon": ""
+            }
+        }
+    ]
+}

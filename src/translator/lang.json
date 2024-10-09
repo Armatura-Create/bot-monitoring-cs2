@@ -1,0 +1,16 @@
+{
+  "en-US": {
+    "status": "Status",
+    "map": "Map",
+    "players": "Players",
+    "connect": "Connect",
+    "last_update": "Last update"
+  },
+  "ru-RU": {
+    "status": "Статус",
+    "map": "Карта",
+    "players": "Игроки",
+    "connect": "Подключиться",
+    "last_update": "Последнее обновление"
+  }
+}
