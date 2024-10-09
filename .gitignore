@@ -18,3 +18,4 @@ dist/
 .env
 
 config_dev.json
+/src/cache/cache.json
