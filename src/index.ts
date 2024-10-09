@@ -32,7 +32,7 @@ client.once('ready', () => {
 
     typedConfig.servers.forEach(server => {
         if (!server.message_id) {
-            sendMessage(client, server, typedConfig.chanel_id.trim())
+            sendMessage(client, server, typedConfig.channel_id.trim())
                 .then(() => {
                     log(`Message sent ${server.ip_port}`);
                 })
@@ -40,7 +40,7 @@ client.once('ready', () => {
                     log(`Error sending message: ${error}`);
                 });
         } else {
-            updateMessage(client, server, typedConfig.chanel_id.trim())
+            updateMessage(client, server, typedConfig.channel_id.trim())
                 .then(() => {
                     log(`Message updated ${server.ip_port}`);
                 })
@@ -50,7 +50,7 @@ client.once('ready', () => {
         }
 
         setInterval(() => {
-            updateMessage(client, server, typedConfig.chanel_id.trim())
+            updateMessage(client, server, typedConfig.channel_id.trim())
                 .then(() => {
                     log(`Message updated ${server.ip_port}`);
                 })

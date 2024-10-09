@@ -9,7 +9,6 @@ import {typedConfig} from "../index";
 
 export function createEmbed(server: CombinedServer): CustomEmbed {
     const formattedDate = getFormattedDate(typedConfig.locale);
-    const imagePath = path.join(__dirname, '../..', 'map_images', `${server.map}.webp`);
 
     let title = server.server_name ? server.server_name : server.name;
 
@@ -64,15 +63,20 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
 
     let attachment = null;
 
-    if (server.image_map && isValidUrl(server.image_map)) {
-        log(`Map image URL: ${server.image_map}`);
-        embed.setImage(server.image_map);
-    } else if (fs.existsSync(imagePath)) {
-        log(`Map image exists: ${imagePath}`);
-        attachment = new AttachmentBuilder(imagePath);
-        embed.setImage(`attachment://${server.map}.webp`);
-    } else {
-        log(`Map image not found: ${imagePath}`);
+    if (server.image_map_active) {
+        const imagePath = path.join(__dirname, '../..', 'map_images', `${server.map}.webp`);
+
+        if (server.image_map && isValidUrl(server.image_map)) {
+            log(`Map image URL: ${server.image_map}`);
+            embed.setImage(server.image_map);
+        } else if (fs.existsSync(imagePath)) {
+            log(`Map image exists: ${imagePath}`);
+            attachment = new AttachmentBuilder(imagePath);
+            embed.setImage(`attachment://${server.map}.webp`);
+        } else {
+            attachment = new AttachmentBuilder(path.join(__dirname, '../..', 'map_images', `not_found.webp`));
+            embed.setImage(`attachment://not_found.webp`);
+        }
     }
 
     if (server.image_thumbnail && isValidUrl(server.image_thumbnail)) {

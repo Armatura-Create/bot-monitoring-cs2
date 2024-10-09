@@ -6,6 +6,7 @@ export interface Server {
     ip_port: string;
     image_thumbnail?: string;
     image_author?: string;
+    image_map_active?: boolean;
     image_map?: string;
     footer?: {
         icon?: string;

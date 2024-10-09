@@ -5,7 +5,7 @@ export interface Config {
     use_plugin: boolean;
     locale: string;
     update_interval: number;
-    chanel_id: string;
+    channel_id: string;
     debug: boolean;
     servers: Server[];
 }
