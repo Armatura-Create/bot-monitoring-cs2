@@ -19,5 +19,5 @@ dist/
 
 config_dev.json
 /src/cache/cache.json
-build/
+bot/
 discord-monitoring-bot.zip

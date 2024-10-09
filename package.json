@@ -1,15 +1,16 @@
 {
-  "name": "monitoring",
-  "version": "1.0.0",
+  "name": "bot-discord-monitoring-cs2",
+  "version": "1.0.1",
   "main": "src/index.js",
   "scripts": {
-    "build": "tsc && cd build && zip -r ../discord-monitoring-bot.zip ./*",
-    "start": "ts-node src/index.ts"
+    "build": "tsc && cp package.json package-lock.json ./bot && zip -r discord-monitoring-bot.zip ./bot ./map_images config.json",
+    "start": "node index.js",
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "Armatura",
   "license": "ISC",
-  "description": "",
+  "description": "Monitoring server status to Discord",
   "dependencies": {
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",

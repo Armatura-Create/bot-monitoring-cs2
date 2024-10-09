@@ -6,6 +6,7 @@ import {sendMessage, updateMessage} from './bot';
 import {Config} from "./types/Config";
 import path from "path";
 import fs from "fs";
+import {Server} from "./types/Server";
 
 dotenv.config();
 
@@ -28,7 +29,19 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 client.once('ready', () => {
     console.log('Bot is online!');
 
-    typedConfig.servers
+    if (Array.isArray(typedConfig.servers) && typedConfig.servers.length > 0) {
+        const duplicates = checkDuplicateServers(typedConfig.servers);
+
+        if (duplicates.length > 0) {
+            console.error(`Duplicate servers found with ip_port: ${duplicates.join(', ')}`);
+            client.destroy();
+            process.exit(0);
+        }
+    } else {
+        console.error('No servers found in the configuration');
+        client.destroy();
+        process.exit(0);
+    }
 
     typedConfig.servers.forEach(server => {
         if (!server.message_id) {
@@ -60,6 +73,21 @@ client.once('ready', () => {
         }, interval);
     });
 });
+
+function checkDuplicateServers(servers: Server[]): string[] {
+    const seen = new Set();
+    const duplicates: string[] = [];
+
+    servers.forEach(server => {
+        if (seen.has(server.ip_port)) {
+            duplicates.push(server.ip_port);
+        } else {
+            seen.add(server.ip_port);
+        }
+    });
+
+    return duplicates;
+}
 
 client.login(typedConfig.bot_token);
 

@@ -59,19 +59,16 @@ export async function sendMessage(client: Client, server: Server, channelId: str
 export async function updateMessage(client: Client, server: Server, channelId: string): Promise<void> {
 
     if (!channelId) {
-        console.log('Channel ID is not defined');
-        return;
+        throw new Error('Channel ID is not defined');
     }
 
     const channel = client.channels.cache.get(channelId) as TextChannel;
     if (!channel) {
-        console.log('Channel not found');
-        return;
+        throw new Error('Channel not found');
     }
 
     if (!server.message_id) {
-        console.log('Message ID is not defined for the server');
-        return;
+        return sendMessage(client, server, channelId);
     }
 
     const [ip, port] = server.ip_port.split(':');
@@ -96,8 +93,7 @@ export async function updateMessage(client: Client, server: Server, channelId: s
             }
         } catch (error) {
             log('Error fetching or updating message:', error);
-            log('Try to send new message');
-            sendMessage(client, server, channelId);
+            return sendMessage(client, server, channelId);
         }
     } else {
         log('Server is not available and not found cache data');
