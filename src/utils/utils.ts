@@ -1,14 +1,26 @@
 import fs from 'fs';
 import path from 'path';
-import config from '../../config.json';
 import {ColorResolvable} from "discord.js";
 import {Config} from "../types/Config";
 import {Server} from "../types/Server";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const configFilePath = process.env.CONFIG_FILE_PATH || 'config.json'; // Установить путь по умолчанию, если переменной нет
+
+const fullConfigPath = path.resolve(__dirname, '../..', configFilePath);
+
+if (!fs.existsSync(fullConfigPath)) {
+    throw new Error(`Config file not found at path: ${fullConfigPath}`);
+}
+
+const config = require(fullConfigPath);
 
 const typedConfig: Config = config as Config;
 
 export function updateConfig(server: Server): void {
-    const serverIndex = typedConfig.servers.findIndex(s => s.connect_link === server.connect_link);
+    const serverIndex = typedConfig.servers.findIndex(s => s.ip_port === server.ip_port);
     if (serverIndex !== -1) {
         typedConfig.servers[serverIndex] = server;
         fs.writeFileSync(path.join(__dirname, '../../config.json'), JSON.stringify(typedConfig, null, 4));
@@ -26,7 +38,8 @@ export function hexToColorResolvable(color: string): ColorResolvable {
 export function getFormattedDate(locale: string): string {
     const now = new Date();
     return new Intl.DateTimeFormat(locale, {
-        day: 'numeric',
+        month: 'short',
+        day: '2-digit',
         hour: 'numeric',
         minute: 'numeric'
     }).format(now);

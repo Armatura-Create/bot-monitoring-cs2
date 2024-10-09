@@ -14,7 +14,7 @@ dist/
 # Игнорировать файлы среды разработки macOS
 .DS_Store
 
-# Игнорировать любые файлы .env
+# Игнорировать любые файлы .env.production
 .env
 
 config_dev.json

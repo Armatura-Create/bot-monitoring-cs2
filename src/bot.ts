@@ -18,9 +18,9 @@ export async function sendMessage(client: Client, server: Server, channelId: str
         return;
     }
 
-    log("check server data: " + server.connect_link);
+    log("check server data: " + server.ip_port);
 
-    const [ip, port] = server.connect_link.split(':');
+    const [ip, port] = server.ip_port.split(':');
     const serverPort = Number.parseInt(port);
 
     const serverData = await getServerData(ip, serverPort);
@@ -29,13 +29,33 @@ export async function sendMessage(client: Client, server: Server, channelId: str
         const combinedData = {...server, ...serverData} as CombinedServer;
         const embed = createEmbed(combinedData);
 
+        let messageId = ""
+
+        if (embed.attachment && embed.components) {
+            const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
+            messageId = message.id;
+        } else if (embed.attachment) {
+            const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment]});
+            messageId = message.id;
+        } else if (embed.components) {
+            const message = await channel.send({embeds: [embed.embedBuilder], components: [embed.components]});
+            messageId = message.id;
+        } else {
+            const message = await channel.send({embeds: [embed.embedBuilder]});
+            messageId = message.id;
+        }
+
         if (embed.attachment != null) {
             const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment]});
-            server.message_id = message.id;
-            updateConfig(server);
+
         } else {
             const message = await channel.send({embeds: [embed.embedBuilder]});
             server.message_id = message.id;
+            updateConfig(server);
+        }
+
+        if (messageId) {
+            server.message_id = messageId;
             updateConfig(server);
         }
 
@@ -63,7 +83,7 @@ export async function updateMessage(client: Client, server: Server, channelId: s
         return;
     }
 
-    const [ip, port] = server.connect_link.split(':');
+    const [ip, port] = server.ip_port.split(':');
     const serverPort = Number.parseInt(port);
 
     const serverData = await getServerData(ip, serverPort);
@@ -74,12 +94,17 @@ export async function updateMessage(client: Client, server: Server, channelId: s
             const combinedData = {...server, ...serverData} as CombinedServer;
             const embed = createEmbed(combinedData);
 
-            if (embed.attachment) {
+            if (embed.attachment && embed.components) {
+                await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
+            } else if (embed.attachment) {
                 await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment]});
+            } else if (embed.components) {
+                await message.edit({embeds: [embed.embedBuilder], components: [embed.components]});
             } else {
                 await message.edit({embeds: [embed.embedBuilder]});
             }
-        } catch (error) {
+        } catch
+            (error) {
             console.log('Error fetching or updating message:', error);
         }
     }

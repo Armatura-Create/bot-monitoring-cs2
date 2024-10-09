@@ -8,7 +8,10 @@ export async function getServerData(ip: string, port: number): Promise<ServerDto
         const state = await GameDig.query({
             type: 'csgo',
             host: ip,
-            port: port
+            port: port,
+            maxRetries: 2,
+            socketTimeout: 1000,
+            attemptTimeout: 1000
         });
 
         const result: ServerDto = {

@@ -17,6 +17,15 @@
             "image_map": "",
             "footer": {
                 "icon": ""
+            },
+            "buttons": {
+                "connect": {
+                    "active": true,
+                    "url": "https://site.com/"
+                },
+                "players": {
+                    "active": true
+                }
             }
         }
     ]
