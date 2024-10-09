@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cd build && zip -r ../discord-monitoring-bot.zip ./*",
     "start": "ts-node src/index.ts"
   },
   "keywords": [],

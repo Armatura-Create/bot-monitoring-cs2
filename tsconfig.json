@@ -3,7 +3,7 @@
     "target": "ES2016",
     "module": "commonjs",
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./build",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": true,
