@@ -12,7 +12,7 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
 
     let title = server.server_name ? server.server_name : server.name;
 
-    log(`Server data for embed:`, server);
+    log('Server data for embed:', server);
 
     if (!server.ip_port || server.ip_port === '') {
         log('IP PORT is not defined');

@@ -87,9 +87,9 @@ export async function updateMessage(client: Client, server: Server, channelId: s
             } else if (embed.attachment) {
                 await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment]});
             } else if (embed.components) {
-                await message.edit({embeds: [embed.embedBuilder], components: [embed.components]});
+                await message.edit({embeds: [embed.embedBuilder], components: [embed.components], files: []});
             } else {
-                await message.edit({embeds: [embed.embedBuilder]});
+                await message.edit({embeds: [embed.embedBuilder], files: []});
             }
         } catch (error) {
             log('Error fetching or updating message:', error);

@@ -35,12 +35,12 @@ client.once('ready', () => {
         if (duplicates.length > 0) {
             console.error(`Duplicate servers found with ip_port: ${duplicates.join(', ')}`);
             client.destroy();
-            process.exit(0);
+            process.exit(1);
         }
     } else {
         console.error('No servers found in the configuration');
         client.destroy();
-        process.exit(0);
+        process.exit(1);
     }
 
     typedConfig.servers.forEach(server => {
@@ -89,16 +89,24 @@ function checkDuplicateServers(servers: Server[]): string[] {
     return duplicates;
 }
 
-client.login(typedConfig.bot_token);
-
-process.on('SIGTERM', () => {
-    console.log('Bot is shutting down');
-    client.destroy();
+process.on('SIGINT', async () => {
+    console.log('Bot is shutting down (SIGINT)');
+    await client.destroy();
     process.exit(0);
 });
 
-process.on('SIGINT', () => {
-    console.log('Bot is shutting down');
-    client.destroy();
+process.on('SIGTERM', async () => {
+    console.log('Bot is shutting down (SIGTERM)');
+    await client.destroy();
     process.exit(0);
 });
+
+client.login(typedConfig.bot_token)
+    .then(() => {
+        console.log('Bot logged in successfully!');
+    })
+    .catch(err => {
+        console.error('Error logging in: ', err);
+        process.exit(1);
+    });
+
