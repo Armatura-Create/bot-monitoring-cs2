@@ -21,10 +21,7 @@ export async function sendMessage(client: Client, server: Server, channelId: str
 
     log("check server data: " + server.ip_port);
 
-    const [ip, port] = server.ip_port.split(':');
-    const serverPort = Number.parseInt(port);
-
-    const serverData = await getServerData(ip, serverPort);
+    const serverData = await getServerData(server);
 
     if (serverData) {
         const combinedData = {...server, ...serverData} as CombinedServer;
@@ -60,10 +57,7 @@ export async function updateMessage(client: Client, server: Server, channelId: s
         return sendMessage(client, server, channelId);
     }
 
-    const [ip, port] = server.ip_port.split(':');
-    const serverPort = Number.parseInt(port);
-
-    const serverData = await getServerData(ip, serverPort);
+    const serverData = await getServerData(server);
 
     if (serverData) {
         try {

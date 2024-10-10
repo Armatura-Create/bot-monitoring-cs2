@@ -10,9 +10,9 @@ interface Player {
     address?: string;
 }
 
-export function createPlayerStatsEmbed(playersData: Player[]) {
+export function createPlayerStatsEmbed(playersData: Player[], serverName: string): EmbedBuilder {
     return new EmbedBuilder()
-        .setTitle(translate('players'))
+        .setTitle(`${translate('players')} (${serverName})`)
         .addFields(
             playersData.map(playerData => createPlayerField(playerData))
         );

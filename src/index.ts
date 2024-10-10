@@ -83,9 +83,12 @@ client.on('interactionCreate', async interaction => {
 
     if (interaction.customId.includes('playerStatsButton')) {
 
-        let ip_port = interaction.customId.split('_')[1];
+        const ip_port = interaction.customId.split('_')[1];
 
-        const embed = createPlayerStatsEmbed(getCacheData(ip_port)?.players || []);
+        const players = getCacheData(ip_port)?.players || [];
+        const serverName = getCacheData(ip_port)?.name || 'Unknown';
+
+        const embed = createPlayerStatsEmbed(players, serverName);
 
         await interaction.reply({
             embeds: [embed],

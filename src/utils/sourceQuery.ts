@@ -2,14 +2,19 @@ import {GameDig} from 'gamedig';
 import {ServerDto} from "../types/ServerDto";
 import {log} from "./utils";
 import {getCacheData, updateCache} from "../cache/cacheUtil";
+import {Server} from "../types/Server";
 
 // Функция для запроса данных о сервере
-export async function getServerData(ip: string, port: number): Promise<ServerDto> {
+export async function getServerData(server: Server): Promise<ServerDto> {
+
+    const [ip, port] = server.ip_port.split(':');
+    const serverPort = Number.parseInt(port);
+
     try {
         const state = await GameDig.query({
             type: 'csgo',
             host: ip,
-            port: port,
+            port: serverPort,
             maxRetries: 2,
             socketTimeout: 1000,
             attemptTimeout: 1000
@@ -17,7 +22,7 @@ export async function getServerData(ip: string, port: number): Promise<ServerDto
 
         const result: ServerDto = {
             status: 'ONLINE',
-            name: state.name,
+            name: server.server_name && server.server_name !== '' ? server.server_name : state.name,
             map: state.map,
             maxPlayers: state.maxplayers,
             players: state.players
@@ -39,7 +44,7 @@ export async function getServerData(ip: string, port: number): Promise<ServerDto
         } else {
             return {
                 status: 'OFFLINE',
-                name: 'Unknown',
+                name: server.server_name && server.server_name !== '' ? server.server_name : 'Unknown',
                 map: 'Unknown',
                 maxPlayers: 0,
                 players: []

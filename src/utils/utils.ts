@@ -41,7 +41,7 @@ export function isValidUrl(imageUrl: string): boolean {
 }
 
 export function log(message: string, object?: any | null): void {
-    if (typedConfig.debug) {
+    if (typedConfig.debug || typedConfig.debug === 'true') {
         if (object != null) {
             console.log(message, object);
         } else {

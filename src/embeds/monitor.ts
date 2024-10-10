@@ -11,8 +11,6 @@ import {getCacheLastAttachmentMaps, updateCacheLastAttachmentMaps} from "../cach
 export function createEmbed(server: CombinedServer): CustomEmbed {
     const formattedDate = getFormattedDate(typedConfig.locale);
 
-    let title = server.server_name ? server.server_name : server.name;
-
     log('Server data for embed:', server);
 
     if (!server.ip_port || server.ip_port === '') {
@@ -57,9 +55,9 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     }
 
     if (server.image_author && isValidUrl(server.image_author)) {
-        embed.setAuthor({name: title, iconURL: server.image_author});
+        embed.setAuthor({name: server.name, iconURL: server.image_author});
     } else {
-        embed.setTitle(title);
+        embed.setTitle(server.name);
     }
 
     let attachment = null;
@@ -98,7 +96,6 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     } else {
         embed.setFooter({text: `${translate('last_update')} ${formattedDate}`});
     }
-
 
     const buttons = new ActionRowBuilder<ButtonBuilder>()
 
