@@ -15,18 +15,23 @@
             "ip_port": "127.0.0.1:27015",
             "image_author": "",
             "image_thumbnail": "",
-            "image_map_active": false,
-            "image_map": "",
+            "map_settings": {
+                "active": false,
+                "image": ""
+            },
             "footer": {
                 "icon": ""
             },
             "buttons": {
                 "connect": {
-                    "active": true,
+                    "active": false,
                     "url": "https://site.com/"
                 },
                 "players": {
-                    "active": true
+                    "active": false
+                },
+                "online_stats": {
+                    "active": false
                 }
             }
         }

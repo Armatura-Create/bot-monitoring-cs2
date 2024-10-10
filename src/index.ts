@@ -1,4 +1,3 @@
-
 import * as dotenv from 'dotenv';
 import {Client, GatewayIntentBits} from 'discord.js';
 import {log} from './utils/utils';
@@ -7,8 +6,10 @@ import {Config} from "./types/Config";
 import path from "path";
 import fs from "fs";
 import {Server} from "./types/Server";
-import {createPlayerStatsEmbed} from "./embeds/statsPlayers";
-import {clearCache, getCacheData} from "./cache/cacheUtil";
+import {createPlayerStatsEmbed, createServerOnline} from "./embeds/statsPlayers";
+import {clearCache, getCacheData, getOnlineStats} from "./cache/cacheUtil";
+import translate from "./translator/translator";
+import {generateChart} from "./utils/canvasCreate";
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ if (!fs.existsSync(fullConfigPath)) {
 }
 
 const config = require(fullConfigPath);
+config.debug = config.debug === 'true' || config.debug === true;
+config.use_plugin = config.use_plugin === 'true' || config.use_plugin === true;
 
 export const typedConfig: Config = config as Config;
 
@@ -37,7 +40,7 @@ client.once('ready', () => {
         const duplicates = checkDuplicateServers(typedConfig.servers);
 
         if (duplicates.length > 0) {
-            console.error(`Duplicate servers found with ip_port: ${duplicates.join(', ')}`);
+            console.error(`Duplicate servers found with ip:port: ${duplicates.join(', ')}`);
             client.destroy();
             process.exit(1);
         }
@@ -94,6 +97,34 @@ client.on('interactionCreate', async interaction => {
             embeds: [embed],
             ephemeral: true
         });
+    }
+
+    if (interaction.customId.includes('showOnlineStats')) {
+        const ip_port = interaction.customId.split('_')[1];
+
+        const currentDate = new Date().toISOString().split('T')[0];
+        const stats = getOnlineStats(ip_port, currentDate);
+
+        if (stats) {
+            generateChart(stats)
+                .then(image => {
+
+                    let serverOnline = createServerOnline(translate('title_stats'), image);
+
+                    interaction.reply(
+                        {
+                            embeds: [serverOnline.embed],
+                            files: [serverOnline.attachment],
+                            ephemeral: true
+                        }
+                    );
+                })
+                .catch(() => {
+                    interaction.reply({content: translate('error_stats'), ephemeral: true});
+                })
+        } else {
+            await interaction.reply({content: translate('not_found_stats'), ephemeral: true});
+        }
     }
 });
 

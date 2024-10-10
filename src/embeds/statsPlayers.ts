@@ -1,4 +1,4 @@
-import {APIEmbedField, EmbedBuilder} from "discord.js";
+import {APIEmbedField, AttachmentBuilder, EmbedBuilder} from "discord.js";
 import translate from "../translator/translator";
 
 interface Player {
@@ -19,9 +19,6 @@ export function createPlayerStatsEmbed(playersData: Player[], serverName: string
 }
 
 function createPlayerField(playerData: Player): APIEmbedField {
-
-    console.log(playerData);
-
     const time = playerData.raw && formatTime(playerData.raw['time']) || '00:00';
     const score = playerData.raw && playerData.raw['score'] || playerData.score || 0;
     return {
@@ -41,4 +38,13 @@ function formatTime(seconds: number): string {
     } else {
         return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
+}
+
+export function createServerOnline(title: string, image: Buffer): { embed: EmbedBuilder, attachment: AttachmentBuilder } {
+    const attachment = new AttachmentBuilder(image, {name: 'stats.png'});
+    const embed = new EmbedBuilder()
+        .setTitle(title)
+        .setImage('attachment://stats.png')
+
+    return {embed, attachment};
 }

@@ -5,6 +5,7 @@ import {ServerDto} from "../types/ServerDto";
 // Путь к файлу кэша
 const cacheFilePath = path.join(__dirname, 'cache.json');
 const cacheLastAttachmentMapsFilePath = path.join(__dirname, 'cache_maps.json');
+const cacheOnlineStats = path.join(__dirname, 'cache_online_stats.json');
 
 interface CacheData {
     [key: string]: ServerDto
@@ -12,6 +13,14 @@ interface CacheData {
 
 interface CacheLastAttachmentMaps {
     [key: string]: string
+}
+
+interface CacheOnlineStats {
+    [key: string]: {
+        [key: string]: {
+            [key: string]: number
+        }
+    }
 }
 
 export function loadCache(): CacheData {
@@ -34,16 +43,56 @@ export function loadCacheLastAttachmentMaps(): CacheLastAttachmentMaps {
     return JSON.parse(rawData) as CacheLastAttachmentMaps;
 }
 
+export function loadCacheOnlineStats() : CacheOnlineStats {
+    if (!fs.existsSync(cacheOnlineStats)) {
+        fs.writeFileSync(cacheOnlineStats, JSON.stringify({}, null, 4), 'utf-8');
+        return {};
+    }
+
+    const rawData = fs.readFileSync(cacheOnlineStats, 'utf-8');
+    return JSON.parse(rawData) as CacheOnlineStats;
+}
+
 export function updateCache(ip_port: string, serverData: ServerDto): void {
     const cache = loadCache();
     cache[ip_port] = serverData;
     saveCache(cache, cacheFilePath);
+    updateOnlineStats(ip_port, serverData.players.length);
 }
 
 export function updateCacheLastAttachmentMaps(ip_port: string, map: string): void {
     const cache = loadCacheLastAttachmentMaps();
     cache[ip_port] = map;
     saveCache(cache, cacheLastAttachmentMapsFilePath);
+}
+
+function updateOnlineStats(serverIp: string, currentPlayers: number) {
+    const now = new Date();
+    const currentHour = String(now.getHours()).padStart(2, '0');  // Текущий час в формате '00', '01' и т.д.
+    const currentDate = now.toISOString().split('T')[0];  // Формат YYYY-MM-DD
+
+    const cache = loadCacheOnlineStats();
+
+    if (!cache[serverIp]) {
+        cache[serverIp] = {};
+    }
+
+    if (!cache[serverIp][currentDate]) {
+        cache[serverIp][currentDate] = {};
+    }
+
+    const currentMaxOnline = cache[serverIp][currentDate][currentHour] || 0;
+
+    if (currentPlayers >= currentMaxOnline) {
+        cache[serverIp][currentDate][currentHour] = currentPlayers;
+    }
+
+    fs.writeFileSync(cacheOnlineStats, JSON.stringify(cache, null, 4), 'utf-8');
+}
+
+export function getOnlineStats(serverIp: string, date: string): { [key: string]: number } {
+    const cache = loadCacheOnlineStats();
+    return cache[serverIp]?.[date] || {};
 }
 
 export function getCacheData(ip_port: string): ServerDto | null {

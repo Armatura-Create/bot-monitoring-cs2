@@ -6,6 +6,11 @@
     "players_stats": "Players stats",
     "score": "Score",
     "time_played": "Time played",
+    "show_online_stats": "Online stats",
+    "count_layers": "Count players",
+    "title_stats": "Online stats for today:",
+    "not_found_stats": "No stats available for today.",
+    "error_stats": "Error getting stats.",
     "connect": "Connect",
     "last_update": "Last update"
   },
@@ -16,6 +21,11 @@
     "players_stats": "Статистика игроков",
     "score": "Счет",
     "time_played": "Время игры",
+    "show_online_stats": "Онлайн статистика",
+    "count_layers": "Количество игроков",
+    "title_stats": "Онлайн статистика за сегодня:",
+    "not_found_stats": "Статистика за сегодня отсутствует.",
+    "error_stats": "Ошибка получения статистики.",
     "connect": "Подключиться",
     "last_update": "Последнее обновление"
   },
@@ -26,6 +36,11 @@
     "players_stats": "Статистика гравців",
     "score": "Рахунок",
     "time_played": "Час гри",
+    "show_online_stats": "Онлайн статистика",
+    "count_layers": "Кількість гравців",
+    "title_stats": "Онлайн статистика за сьогодні:",
+    "not_found_stats": "Статистика за сьогодні відсутня.",
+    "error_stats": "Помилка отримання статистики.",
     "connect": "Підключитися",
     "last_update": "Останнє оновлення"
   }

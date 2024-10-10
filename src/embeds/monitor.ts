@@ -62,14 +62,14 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
 
     let attachment = null;
 
-    if (server.image_map_active) {
+    if (server.map_settings?.active) {
         const imagePath = path.join(__dirname, '../..', 'map_images', `${server.map}.webp`);
 
         const lastMap = getCacheLastAttachmentMaps(server.ip_port);
 
-        if (server.image_map && isValidUrl(server.image_map)) {
-            log(`Map image URL: ${server.image_map}`);
-            embed.setImage(server.image_map);
+        if (server.map_settings.image && isValidUrl(server.map_settings.image)) {
+            log(`Map image URL: ${server.map_settings.image}`);
+            embed.setImage(server.map_settings.image);
         } else if (fs.existsSync(imagePath)) {
             log(`Map image exists: ${imagePath}`);
             if (lastMap !== server.map) {
@@ -113,9 +113,16 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
             .setLabel(translate('players_stats'))
             .setStyle(ButtonStyle.Primary)
 
-        buttons.addComponents(
-            playersButton
-        );
+        buttons.addComponents(playersButton);
+    }
+
+    if (server.buttons?.online_stats?.active) {
+        const onlineStatsButton =
+            new ButtonBuilder()
+                .setCustomId(`showOnlineStats_${server.ip_port}`)
+                .setLabel(translate('show_online_stats'))
+                .setStyle(ButtonStyle.Primary);
+        buttons.addComponents(onlineStatsButton);
     }
 
     return {embedBuilder: embed, attachment: attachment, components: buttons};

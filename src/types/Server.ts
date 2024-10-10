@@ -6,8 +6,10 @@ export interface Server {
     ip_port: string;
     image_thumbnail?: string;
     image_author?: string;
-    image_map_active?: boolean;
-    image_map?: string;
+    map_settings?: {
+        active: boolean;
+        image?: string;
+    };
     footer?: {
         icon?: string;
     };
@@ -17,6 +19,9 @@ export interface Server {
             url: string;
         },
         players?: {
+            active: boolean;
+        },
+        online_stats? : {
             active: boolean;
         }
     }

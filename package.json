@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "Monitoring server status to Discord",
   "dependencies": {
+    "chartjs-node-canvas": "^4.1.6",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
