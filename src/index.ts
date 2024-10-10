@@ -7,6 +7,8 @@ import {Config} from "./types/Config";
 import path from "path";
 import fs from "fs";
 import {Server} from "./types/Server";
+import {createPlayerStatsEmbed} from "./embeds/statsPlayers";
+import {getCacheData} from "./cache/cacheUtil";
 
 dotenv.config();
 
@@ -72,6 +74,22 @@ client.once('ready', () => {
                 });
         }, interval);
     });
+});
+
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId.includes('playerStatsButton')) {
+
+        let ip_port = interaction.customId.split('_')[1];
+
+        const embed = createPlayerStatsEmbed(getCacheData(ip_port)?.players || []);
+
+        await interaction.reply({
+            embeds: [embed],
+            ephemeral: true
+        });
+    }
 });
 
 function checkDuplicateServers(servers: Server[]): string[] {

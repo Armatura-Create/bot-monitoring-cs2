@@ -29,7 +29,7 @@ export async function sendMessage(client: Client, server: Server, channelId: str
         const combinedData = {...server, ...serverData} as CombinedServer;
         const embed = createEmbed(combinedData);
 
-        let messageId = ""
+        let messageId: string
 
         if (embed.attachment && embed.components) {
             const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});

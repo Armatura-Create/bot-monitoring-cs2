@@ -7,5 +7,6 @@ export interface Config {
     update_interval: number;
     channel_id: string;
     debug: boolean;
+    time_zone: string;
     servers: Server[];
 }

@@ -79,6 +79,7 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
         }
     }
 
+
     if (server.image_thumbnail && isValidUrl(server.image_thumbnail)) {
         embed.setThumbnail(server.image_thumbnail);
     }
@@ -92,12 +93,23 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
 
     const buttons = new ActionRowBuilder<ButtonBuilder>()
 
-    if (server.buttons?.connect && server.buttons.connect.active && server.buttons.connect.url && isValidUrl(server.buttons.connect.url)) {
+    if (server.buttons?.connect && server.buttons?.connect.active && server.buttons.connect.url && isValidUrl(server.buttons.connect.url)) {
         const connectButton = new ButtonBuilder()
             .setLabel(translate('connect'))
             .setStyle(ButtonStyle.Link)
             .setURL(server.buttons.connect.url);
         buttons.addComponents(connectButton);
+    }
+
+    if (server.buttons?.players?.active && server.players.length > 0) {
+        const playersButton = new ButtonBuilder()
+            .setCustomId(`playerStatsButton_${server.ip_port}`)
+            .setLabel(translate('players_stats'))
+            .setStyle(ButtonStyle.Primary)
+
+        buttons.addComponents(
+            playersButton
+        );
     }
 
     return {embedBuilder: embed, attachment: attachment, components: buttons};

@@ -5,6 +5,7 @@
     "use_plugin": false,
     "locale": "en-US",
     "channel_id": "",
+    "time_zone": "UTC",
     "servers": [
         {
             "server_name": "Server Name",

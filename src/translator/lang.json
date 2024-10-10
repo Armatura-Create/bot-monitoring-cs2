@@ -3,6 +3,9 @@
     "status": "Status",
     "map": "Map",
     "players": "Players",
+    "players_stats": "Players stats",
+    "score": "Score",
+    "time_played": "Time played",
     "connect": "Connect",
     "last_update": "Last update"
   },
@@ -10,6 +13,9 @@
     "status": "Статус",
     "map": "Карта",
     "players": "Игроки",
+    "players_stats": "Статистика игроков",
+    "score": "Счет",
+    "time_played": "Время игры",
     "connect": "Подключиться",
     "last_update": "Последнее обновление"
   },
@@ -17,6 +23,9 @@
     "status": "Статус",
     "map": "Карта",
     "players": "Гравці",
+    "players_stats": "Статистика гравців",
+    "score": "Рахунок",
+    "time_played": "Час гри",
     "connect": "Підключитися",
     "last_update": "Останнє оновлення"
   }

@@ -27,6 +27,7 @@ export function hexToColorResolvable(color: string): ColorResolvable {
 export function getFormattedDate(locale: string): string {
     const now = new Date();
     return new Intl.DateTimeFormat(locale, {
+        timeZone: typedConfig.time_zone,
         month: 'short',
         day: '2-digit',
         hour: 'numeric',
