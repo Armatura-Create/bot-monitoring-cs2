@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs";
 import {Server} from "./types/Server";
 import {createPlayerStatsEmbed} from "./embeds/statsPlayers";
-import {getCacheData} from "./cache/cacheUtil";
+import {clearCache, getCacheData} from "./cache/cacheUtil";
 
 dotenv.config();
 
@@ -31,6 +31,8 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 client.once('ready', () => {
     console.log('Bot is online!');
 
+    clearCache();
+
     if (Array.isArray(typedConfig.servers) && typedConfig.servers.length > 0) {
         const duplicates = checkDuplicateServers(typedConfig.servers);
 
@@ -45,7 +47,7 @@ client.once('ready', () => {
         process.exit(1);
     }
 
-    typedConfig.servers.forEach(server => {
+    typedConfig.servers.forEach((server, index) => {
         if (!server.message_id) {
             sendMessage(client, server, typedConfig.channel_id.trim())
                 .then(() => {
@@ -72,7 +74,7 @@ client.once('ready', () => {
                 .catch(error => {
                     log(`Error updating message: ${error}`);
                 });
-        }, interval);
+        }, interval + index);
     });
 });
 

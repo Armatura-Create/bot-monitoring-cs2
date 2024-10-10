@@ -4,6 +4,7 @@ import {updateConfig, log} from './utils/utils';
 import {getServerData} from './utils/sourceQuery';
 import {Server} from "./types/Server";
 import {CombinedServer} from "./types/ServerDto";
+import {getCacheLastAttachmentMaps} from "./cache/cacheUtil";
 
 export async function sendMessage(client: Client, server: Server, channelId: string): Promise<void> {
 
@@ -29,26 +30,14 @@ export async function sendMessage(client: Client, server: Server, channelId: str
         const combinedData = {...server, ...serverData} as CombinedServer;
         const embed = createEmbed(combinedData);
 
-        let messageId: string
+        const message = await channel.send({
+            embeds: [embed.embedBuilder],
+            files: embed.attachment ? [embed.attachment] : [],
+            components: embed.components ? [embed.components] : []
+        });
 
-        if (embed.attachment && embed.components) {
-            const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
-            messageId = message.id;
-        } else if (embed.attachment) {
-            const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment]});
-            messageId = message.id;
-        } else if (embed.components) {
-            const message = await channel.send({embeds: [embed.embedBuilder], components: [embed.components]});
-            messageId = message.id;
-        } else {
-            const message = await channel.send({embeds: [embed.embedBuilder]});
-            messageId = message.id;
-        }
-
-        if (messageId) {
-            server.message_id = messageId;
-            updateConfig(server);
-        }
+        server.message_id = message.id;
+        updateConfig(server);
 
     } else {
         log('Server is not available and not found cache data');
@@ -87,10 +76,11 @@ export async function updateMessage(client: Client, server: Server, channelId: s
             } else if (embed.attachment) {
                 await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment]});
             } else if (embed.components) {
-                await message.edit({embeds: [embed.embedBuilder], components: [embed.components], files: []});
+                await message.edit({embeds: [embed.embedBuilder], components: [embed.components]});
             } else {
-                await message.edit({embeds: [embed.embedBuilder], files: []});
+                await message.edit({embeds: [embed.embedBuilder]});
             }
+
         } catch (error) {
             log('Error fetching or updating message:', error);
             return sendMessage(client, server, channelId);

@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import {CustomEmbed} from "../types/CustomEmbed";
 import {typedConfig} from "../index";
+import {getCacheLastAttachmentMaps, updateCacheLastAttachmentMaps} from "../cache/cacheUtil";
 
 export function createEmbed(server: CombinedServer): CustomEmbed {
     const formattedDate = getFormattedDate(typedConfig.locale);
@@ -66,15 +67,23 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     if (server.image_map_active) {
         const imagePath = path.join(__dirname, '../..', 'map_images', `${server.map}.webp`);
 
+        const lastMap = getCacheLastAttachmentMaps(server.ip_port);
+
         if (server.image_map && isValidUrl(server.image_map)) {
             log(`Map image URL: ${server.image_map}`);
             embed.setImage(server.image_map);
         } else if (fs.existsSync(imagePath)) {
             log(`Map image exists: ${imagePath}`);
-            attachment = new AttachmentBuilder(imagePath);
+            if (lastMap !== server.map) {
+                attachment = new AttachmentBuilder(imagePath);
+                updateCacheLastAttachmentMaps(server.ip_port, server.map);
+            }
             embed.setImage(`attachment://${server.map}.webp`);
         } else {
-            attachment = new AttachmentBuilder(path.join(__dirname, '../..', 'map_images', `not_found.webp`));
+            if (lastMap !== 'not_found') {
+                attachment = new AttachmentBuilder(path.join(__dirname, '../..', 'map_images', `not_found.webp`));
+                updateCacheLastAttachmentMaps(server.ip_port, 'not_found');
+            }
             embed.setImage(`attachment://not_found.webp`);
         }
     }
