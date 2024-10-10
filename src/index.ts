@@ -102,14 +102,21 @@ client.on('interactionCreate', async interaction => {
     if (interaction.customId.includes('showOnlineStats')) {
         const ip_port = interaction.customId.split('_')[1];
 
-        const currentDate = new Date().toISOString().split('T')[0];
-        const stats = getOnlineStats(ip_port, currentDate);
+        const currentDate = new Intl.DateTimeFormat(typedConfig.locale, {
+            timeZone: typedConfig.time_zone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(new Date());
 
-        if (stats) {
+        const stats = getOnlineStats(ip_port, currentDate);
+        const serverName = getCacheData(ip_port)?.name || translate('title_stats');
+
+        if (stats && Object.keys(stats).length > 0) {
             generateChart(stats)
                 .then(image => {
 
-                    let serverOnline = createServerOnline(translate('title_stats'), image);
+                    let serverOnline = createServerOnline(serverName, image);
 
                     interaction.reply(
                         {

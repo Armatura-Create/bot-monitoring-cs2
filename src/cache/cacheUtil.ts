@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {ServerDto} from "../types/ServerDto";
+import {typedConfig} from "../index";
 
 // Путь к файлу кэша
 const cacheFilePath = path.join(__dirname, 'cache.json');
@@ -68,8 +69,18 @@ export function updateCacheLastAttachmentMaps(ip_port: string, map: string): voi
 
 function updateOnlineStats(serverIp: string, currentPlayers: number) {
     const now = new Date();
-    const currentHour = String(now.getHours()).padStart(2, '0');  // Текущий час в формате '00', '01' и т.д.
-    const currentDate = now.toISOString().split('T')[0];  // Формат YYYY-MM-DD
+    const currentHour = new Intl.DateTimeFormat(typedConfig.locale, {
+        timeZone: typedConfig.time_zone,
+        hour: '2-digit',
+        hour12: false,
+    }).format(now);
+
+    const currentDate = new Intl.DateTimeFormat(typedConfig.locale, {
+        timeZone: typedConfig.time_zone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).format(now);
 
     const cache = loadCacheOnlineStats();
 
