@@ -1,12 +1,10 @@
-[//]: # (<div align="center">)
+<div align="center">
 
-[//]: # ()
-[//]: # ([<kbd><br>🌐 Русский README<br><br></kbd>]&#40;./README_RU.md&#41;)
+  [<kbd><br>🌐 Русский README<br><br></kbd>](./README_RU.md)
+  
+  [<kbd><br>🌐 English README<br><br></kbd>](./README.md)
 
-[//]: # ([<kbd><br>🌐 English README<br><br></kbd>]&#40;./README.md&#41;)
-
-[//]: # ()
-[//]: # (</div>)
+</div>
 
 <p align="center">
    <a href="https://github.com/Armatura-Create/bot-monitoring-cs2/releases">
@@ -20,7 +18,6 @@
  This bot allows monitoring of multiple game servers, providing information about the server status, map, and players. It also allows for flexible configuration of the bot's appearance and behavior, including map images and online player stats.
 
 <hr />
-&nbsp;
 
 ## Features
 
@@ -32,7 +29,6 @@
 - Multi\-server support: Monitor multiple servers with a single bot.
 
 <hr />
-&nbsp;
 
 # Installation
 
@@ -163,7 +159,7 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
   - ```footer```: Information for the footer of the embed message.
     - ```icon```: URL of the footer icon.
   - ```buttons```: Configuration for buttons within the embed.
-    - ```connect```: A button to connect to the server.
+    - ```connect```: A button to connect to the server. [INSTRUCTIONS](https://github.com/Armatura-Create/bot-monitoring-cs2/tree/main/nginx/README.md)
     - ```players```: A button to show player stats on server.
     - ```online_stats```: A button to display server online statistics.
 
