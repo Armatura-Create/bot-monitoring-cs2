@@ -50,6 +50,7 @@ unzip discord-monitoring-bot.zip
 
 ### Install dependencies:
 ```bash
+cd bot/
 npm install --production
 ```
 
