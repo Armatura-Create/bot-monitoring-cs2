@@ -176,6 +176,12 @@ Once the bot is configured and running, it will automatically post updates about
 - <b>Buttons</b>: Include buttons to connect to the server or show player statistics.
 - <b>Real-time stats</b>: Server player statistics are updated in real-time at the interval specified in the configuration.
 
+# Preview
+
+<img width="540" alt="image" src="https://github.com/user-attachments/assets/aab4705f-a412-4025-b1fe-1f1c29aefac0">
+<img width="538" alt="image" src="https://github.com/user-attachments/assets/45306480-dfb2-4e56-98c0-5f17d000b31d">
+
+
 # 🆘 Find bug? Report it!
 
 - [GitHub Issues](https://github.com/Armatura-Create/bot-monitoring-cs2/issues)
