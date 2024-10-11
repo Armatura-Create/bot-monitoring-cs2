@@ -3,7 +3,6 @@ import * as path from 'path';
 import {ServerDto} from "../types/ServerDto";
 import {typedConfig} from "../index";
 
-// Путь к файлу кэша
 const cacheFilePath = path.join(__dirname, 'cache.json');
 const cacheLastAttachmentMapsFilePath = path.join(__dirname, 'cache_maps.json');
 const cacheOnlineStats = path.join(__dirname, 'cache_online_stats.json');

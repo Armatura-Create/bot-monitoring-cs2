@@ -21,9 +21,30 @@ if (!fs.existsSync(fullConfigPath)) {
     throw new Error(`Config file not found at path: ${fullConfigPath}`);
 }
 
-const config = require(fullConfigPath);
-config.debug = config.debug === 'true' || config.debug === true;
-config.use_plugin = config.use_plugin === 'true' || config.use_plugin === true;
+function convertBigNumbersAndBooleans(jsonString: string): string {
+    jsonString = jsonString.replace(/:\s*([\d]{15,})/g, (match, p1) => {
+        return `: "${p1}"`;
+    });
+
+    jsonString = jsonString.replace(/:\s*"true"/g, ': true').replace(/:\s*"false"/g, ': false');
+
+    return jsonString;
+}
+
+function readAndUpdateConfigFile(filePath: string) {
+    try {
+        let rawData = fs.readFileSync(filePath, 'utf8');
+        rawData = convertBigNumbersAndBooleans(rawData);
+        let config = JSON.parse(rawData);
+        fs.writeFileSync(filePath, JSON.stringify(config, null, 4), 'utf8');
+        return config;
+    } catch (error) {
+        console.error('Error reading or writing the JSON file:', error);
+        throw error;
+    }
+}
+
+const config = readAndUpdateConfigFile(configFilePath);
 
 export const typedConfig: Config = config as Config;
 
