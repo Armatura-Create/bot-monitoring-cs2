@@ -125,5 +125,9 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
         buttons.addComponents(onlineStatsButton);
     }
 
-    return {embedBuilder: embed, attachment: attachment, components: buttons};
+    if (buttons.components.length > 0 && buttons.components.length <= 5) {
+        return { embedBuilder: embed, attachment: attachment, components: buttons };
+    } else {
+        return { embedBuilder: embed, attachment: attachment, components: null };
+    }
 }

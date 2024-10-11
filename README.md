@@ -150,7 +150,7 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
 - ```channel_id```: The Discord channel ID where the bot will post updates.
 - ```time_zone```: Timezone for the bot (e.g., UTC, Europe/Kiev).
 - ```servers```: An array of server objects where each server can have its own configuration.
-  - ```server_name```: The name of the server.
+  - ```server_name```: The name of the server (optional, if not set - bot get name by server auto).
   - ```url```: The URL to your website (optional).
   - ```message_id```: The ID of the message where server updates are posted (if not set - generate auto).
   - ```color```: The color of the embed message.

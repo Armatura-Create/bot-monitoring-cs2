@@ -44,7 +44,7 @@ function readAndUpdateConfigFile(filePath: string) {
     }
 }
 
-const config = readAndUpdateConfigFile(configFilePath);
+const config = readAndUpdateConfigFile(fullConfigPath);
 
 export const typedConfig: Config = config as Config;
 
