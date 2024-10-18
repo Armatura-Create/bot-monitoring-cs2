@@ -22,33 +22,40 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     }
 
     if (!server.players) {
-        log('Players is not defined or empty');
+        log('Players is not defined');
     }
+
+    let fields = [];
+
+    if (server.show_status) {
+        fields.push({
+            name: `**${translate('status')}**`,
+            value: `\`\`\`fix\n${server.status}\`\`\``,
+            inline: false
+        });
+    }
+
+    fields.push(
+        {
+            name: `**${translate('map')}**`,
+            value: `\`\`\`fix\n${server.map}\`\`\``,
+            inline: true
+        },
+        {
+            name: `**${translate('players')}**`,
+            value: `\`\`\`ml\n${server.players.length} / ${server.maxPlayers} \`\`\``,
+            inline: true
+        },
+        {
+            name: `**${translate('connect')}**`,
+            value: `\`\`\`fix\n${server.ip_port}\`\`\``,
+            inline: false
+        }
+    );
 
     let embed = new EmbedBuilder()
         .setColor(hexToColorResolvable(server.status == 'ONLINE' ? server.color : '#FF0000'))
-        .addFields(
-            {
-                name: `**${translate('status')}**`,
-                value: `\`\`\`fix\n${server.status}\`\`\``,
-                inline: false
-            },
-            {
-                name: `**${translate('map')}**`,
-                value: `\`\`\`fix\n${server.map}\`\`\``,
-                inline: true
-            },
-            {
-                name: `**${translate('players')}**`,
-                value: `\`\`\`ml\n${server.players.length} / ${server.maxPlayers} \`\`\``,
-                inline: true
-            },
-            {
-                name: `**${translate('connect')}**`,
-                value: `\`\`\`fix\n${server.ip_port}\`\`\``,
-                inline: false
-            }
-        );
+        .addFields(fields);
 
     if (server.url && isValidUrl(server.url)) {
         embed.setURL(server.url);
@@ -126,8 +133,65 @@ export function createEmbed(server: CombinedServer): CustomEmbed {
     }
 
     if (buttons.components.length > 0 && buttons.components.length <= 5) {
-        return { embedBuilder: embed, attachment: attachment, components: buttons };
+        return {embedBuilder: embed, attachment: attachment, components: buttons};
     } else {
-        return { embedBuilder: embed, attachment: attachment, components: null };
+        return {embedBuilder: embed, attachment: attachment, components: null};
     }
+}
+
+export function createOneEmbed(servers: CombinedServer[]): EmbedBuilder {
+
+    let embed = new EmbedBuilder()
+        .setColor(hexToColorResolvable(typedConfig.embed_one_message_color));
+
+    let fields = [];
+
+    servers.forEach(server => {
+
+        if (!server.ip_port || server.ip_port === '') {
+            log('IP PORT is not defined');
+        }
+
+        if (!server.map || server.map === '') {
+            log('Map is not defined');
+        }
+
+        if (!server.players) {
+            log('Players is not defined');
+        }
+
+        if (server.show_status) {
+            fields.push({
+                name: `**${translate('status')}**`,
+                value: `\`\`\`fix\n${server.status}\`\`\``,
+                inline: false
+            });
+        }
+
+        fields.push(
+            {
+                name: `**${translate('map')}**`,
+                value: `\`\`\`fix\n${server.map}\`\`\``,
+                inline: true
+            },
+            {
+                name: `**${translate('players')}**`,
+                value: `\`\`\`ml\n${server.players.length} / ${server.maxPlayers} \`\`\``,
+                inline: true
+            },
+            {
+                name: `**${translate('connect')}**`,
+                value: `\`\`\`fix\n${server.ip_port}\`\`\``,
+                inline: false
+            }
+        );
+    });
+
+    if (server.footer?.icon && isValidUrl(server.footer.icon)) {
+        embed.setFooter({text: `${translate('last_update')} ${formattedDate}`, iconURL: server.footer.icon});
+    } else {
+        embed.setFooter({text: `${translate('last_update')} ${formattedDate}`});
+    }
+
+    return new EmbedBuilder().setColor(hexToColorResolvable('#FF0000')).setTitle('One message for all servers');
 }

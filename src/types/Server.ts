@@ -13,6 +13,7 @@ export interface Server {
     footer?: {
         icon?: string;
     };
+    show_status?: boolean;
     buttons?: {
         connect?: {
             active: boolean;

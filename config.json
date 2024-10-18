@@ -1,5 +1,14 @@
 {
     "debug": true,
+    "type": "individual_messages",
+    "one_message_config": {
+        "message_id": "",
+        "color": "#FFFFFF",
+        "image_author": "",
+        "footer": {
+            "icon": ""
+        }
+    },
     "bot_token": "",
     "update_interval": 60,
     "use_plugin": false,

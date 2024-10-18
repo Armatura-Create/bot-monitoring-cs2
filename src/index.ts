@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import {Client, GatewayIntentBits} from 'discord.js';
 import {log} from './utils/utils';
-import {sendMessage, updateMessage} from './bot';
+import {sendMessage, sendOneMessage, updateMessage, updateOneMessage} from './bot';
 import {Config} from "./types/Config";
 import path from "path";
 import fs from "fs";
@@ -31,12 +31,55 @@ function convertBigNumbersAndBooleans(jsonString: string): string {
     return jsonString;
 }
 
-function readAndUpdateConfigFile(filePath: string) {
+function updateMissingFields(config: Config): Config {
+    if (!config.type) {
+        config.type = 'individual_messages';
+    }
+
+    if (!config.one_message_id) {
+        config.one_message_id = '';
+    }
+
+    if (!config.embed_one_message_color) {
+        config.embed_one_message_color = '#FFFFFF';
+    }
+
+    config.servers.forEach((server: any) => {
+        if (!server.hasOwnProperty('show_status')) {
+            server.show_status = true;
+        }
+
+        if (!server.map_settings) {
+            server.map_settings = { active: false };
+        }
+
+        if (!server.buttons) {
+            server.buttons = {};
+        }
+        if (!server.buttons.connect) {
+            server.buttons.connect = { active: false, url: '' };
+        }
+        if (!server.buttons.players) {
+            server.buttons.players = { active: false };
+        }
+        if (!server.buttons.online_stats) {
+            server.buttons.online_stats = { active: false };
+        }
+    });
+
+    return config;
+}
+
+function readAndUpdateConfigFile(filePath: string) : Config {
     try {
         let rawData = fs.readFileSync(filePath, 'utf8');
         rawData = convertBigNumbersAndBooleans(rawData);
-        let config = JSON.parse(rawData);
+        let config = JSON.parse(rawData) as Config;
+
+        config = updateMissingFields(config);
+
         fs.writeFileSync(filePath, JSON.stringify(config, null, 4), 'utf8');
+
         return config;
     } catch (error) {
         console.error('Error reading or writing the JSON file:', error);
@@ -44,9 +87,7 @@ function readAndUpdateConfigFile(filePath: string) {
     }
 }
 
-const config = readAndUpdateConfigFile(fullConfigPath);
-
-export const typedConfig: Config = config as Config;
+export const typedConfig = readAndUpdateConfigFile(fullConfigPath);
 
 const interval = Math.max(typedConfig.update_interval || 30, 30) * 1000;
 
@@ -71,35 +112,65 @@ client.once('ready', () => {
         process.exit(1);
     }
 
-    typedConfig.servers.forEach((server, index) => {
-        if (!server.message_id) {
-            sendMessage(client, server, typedConfig.channel_id.trim())
+    if (typedConfig.type === 'individual_messages') {
+        typedConfig.servers.forEach((server, index) => {
+            if (!server.message_id) {
+                sendMessage(client, server, typedConfig.channel_id.trim())
+                    .then(() => {
+                        log(`Message sent ${server.ip_port}`);
+                    })
+                    .catch(error => {
+                        log(`Error sending message: ${error}`);
+                    });
+            } else {
+                updateMessage(client, server, typedConfig.channel_id.trim())
+                    .then(() => {
+                        log(`Message updated ${server.ip_port}`);
+                    })
+                    .catch(error => {
+                        log(`Error updating message: ${error}`);
+                    });
+            }
+
+            setInterval(() => {
+                updateMessage(client, server, typedConfig.channel_id.trim())
+                    .then(() => {
+                        log(`Message updated ${server.ip_port}`);
+                    })
+                    .catch(error => {
+                        log(`Error updating message: ${error}`);
+                    });
+            }, interval + index);
+        });
+    } else {
+        if (!typedConfig.one_message_id) {
+            sendOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
                 .then(() => {
-                    log(`Message sent ${server.ip_port}`);
+                    log('One message sent');
                 })
                 .catch(error => {
-                    log(`Error sending message: ${error}`);
+                    log(`Error sending one message: ${error}`);
                 });
         } else {
-            updateMessage(client, server, typedConfig.channel_id.trim())
+           updateOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
                 .then(() => {
-                    log(`Message updated ${server.ip_port}`);
+                    log('One message updated');
                 })
                 .catch(error => {
-                    log(`Error updating message: ${error}`);
+                    log(`Error updating one message: ${error}`);
                 });
         }
 
         setInterval(() => {
-            updateMessage(client, server, typedConfig.channel_id.trim())
+            updateOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
                 .then(() => {
-                    log(`Message updated ${server.ip_port}`);
+                    log('One message updated');
                 })
                 .catch(error => {
-                    log(`Error updating message: ${error}`);
+                    log(`Error updating one message: ${error}`);
                 });
-        }, interval + index);
-    });
+        }, interval);
+    }
 });
 
 client.on('interactionCreate', async interaction => {
