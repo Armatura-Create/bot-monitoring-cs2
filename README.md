@@ -121,6 +121,7 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
             "ip_port": "127.0.0.1:27015",
             "image_author": "",
             "image_thumbnail": "",
+            "show_status": true,           
             "map_settings": {
                 "active": false,
                 "image": ""
@@ -169,6 +170,7 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
   - ```ip_port```: The IP address and port of the server.
   - ```image_author```: URL of the author's image (optional).
   - ```image_thumbnail```: URL of the thumbnail image for the server (optional).
+  - ```show_status```: Show server status (true or false).
   - ```map_settings```: Configuration for the map image.
     - ```active```: Whether map images are active.
     - ```image```: The URL of the map image (if empty - bot try set image by name map).

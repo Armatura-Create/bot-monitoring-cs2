@@ -120,6 +120,7 @@ sudo systemctl status cs2-monitoring-bot
             "ip_port": "127.0.0.1:27015",
             "image_author": "",
             "image_thumbnail": "",
+            "show_status": true,
             "map_settings": {
                 "active": false,
                 "image": ""
@@ -167,6 +168,7 @@ sudo systemctl status cs2-monitoring-bot
     - ```ip_port```: IP-адрес и порт сервера.
     - ```image_author```: URL изображения автора (опционально).
     - ```image_thumbnail```: URL миниатюры для сервера (опционально).
+    - ```show_status```: Отображение статуса сервера (true или false).
     - ```map_settings```: Настройки изображения карты.
         - ```active```: Включено ли отображение изображений карт.
         - ```image```: URL изображения карты (если не указано, бот попробует установить изображение по названию карты).
