@@ -1,12 +1,12 @@
 {
     "debug": true,
-    "type": "individual_messages",
-    "one_message_config": {
+    "compact": false,
+    "compact_config": {
         "message_id": "",
         "color": "#FFFFFF",
         "image_author": "",
         "footer": {
-            "icon": ""
+            "icon": "https://cdn.patchbot.io/games/11/counter_strike_go_sm.webp"
         }
     },
     "bot_token": "",
@@ -42,7 +42,8 @@
                 "online_stats": {
                     "active": false
                 }
-            }
+            },
+            "show_status": true
         }
     ]
 }

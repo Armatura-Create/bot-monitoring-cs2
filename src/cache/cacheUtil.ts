@@ -102,7 +102,16 @@ function updateOnlineStats(serverIp: string, currentPlayers: number) {
 
 export function getOnlineStats(serverIp: string, date: string): { [key: string]: number } {
     const cache = loadCacheOnlineStats();
-    return cache[serverIp]?.[date] || {};
+    const stats = cache[serverIp]?.[date] || {};
+
+    const sortedStats = Object.keys(stats)
+        .sort((a, b) => Number(a) - Number(b))
+        .reduce((acc, key) => {
+            acc[key] = stats[key];
+            return acc;
+        }, {} as { [key: string]: number });
+
+    return sortedStats;
 }
 
 export function getCacheData(ip_port: string): ServerDto | null {

@@ -99,6 +99,14 @@ sudo systemctl status cs2-monitoring-bot
     "debug": true,
     "bot_token": "",
     "update_interval": 60,
+      "compact_config": {
+        "message_id": "",
+        "color": "#FFFFFF",
+        "image_author": "",
+        "footer": {
+          "icon": ""
+        }
+      },
     "use_plugin": false,
     "locale": "en-US",
     "channel_id": "",
@@ -141,6 +149,12 @@ sudo systemctl status cs2-monitoring-bot
 - ```debug```: Включение или отключение режима отладки (true или false).
 - ```bot_token```: Токен вашего бота Discord.
 - ```update_interval```: Интервал времени в секундах между обновлениями статуса сервера.
+- ```compact_config```: Конфигурация для компактного режима.
+    - ```message_id```: ID сообщения, в котором публикуются обновления сервера (если не указано - создается автоматически).
+    - ```color```: Цвет сообщения embed.
+    - ```image_author```: URL изображения автора (опционально).
+    - ```footer```: Информация для нижней части сообщения embed.
+        - ```icon```: URL иконки в нижней части сообщения (опционально).
 - ```use_plugin```: Включение плагина для расширенных возможностей (например, плагин для детальной статистики игроков).
 - ```locale```: Языковая локаль для бота (например, en-US, ru-RU).
 - ```channel_id```: ID канала Discord, в который бот будет отправлять обновления.

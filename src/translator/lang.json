@@ -1,6 +1,7 @@
 {
   "en-US": {
     "status": "Status",
+    "server": "Server",
     "map": "Map",
     "players": "Players",
     "players_stats": "Players stats",
@@ -16,6 +17,7 @@
   },
   "ru-RU": {
     "status": "Статус",
+    "server": "Сервер",
     "map": "Карта",
     "players": "Игроки",
     "players_stats": "Статистика игроков",
@@ -31,6 +33,7 @@
   },
   "uk-UA": {
     "status": "Статус",
+    "server": "Сервер",
     "map": "Карта",
     "players": "Гравці",
     "players_stats": "Статистика гравців",

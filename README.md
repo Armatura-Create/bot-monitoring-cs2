@@ -99,6 +99,15 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
     "debug": true,
     "bot_token": "",
     "update_interval": 60,
+    "compact": false,
+    "compact_config": {
+      "message_id": "",
+      "color": "#FFFFFF",
+      "image_author": "",
+      "footer": {
+        "icon": ""
+      }
+    },
     "use_plugin": false,
     "locale": "en-US",
     "channel_id": "",
@@ -141,6 +150,13 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
 - ```debug```: Enables or disables debug mode (true or false).
 - ```bot_token```: Your Discord bot token.
 - ```update_interval```: Time in seconds between server status updates.
+- ```compact```: Enables compact mode (true or false).
+- ```compact_config```: Configuration for compact mode.
+  - ```message_id```: The ID of the message where server updates are posted (if not set - generate auto).
+  - ```color```: The color of the embed message.
+  - ```image_author```: URL of the author's image (optional).
+  - ```footer```: Information for the footer of the embed message.
+    - ```icon```: URL of the footer icon (opional).
 - ```use_plugin```: Enables plugin features if set to true (In plans plugin for detail player statistic).
 - ```locale```: The language locale for the bot (e.g., en-US, ru-RU).
 - ```channel_id```: The Discord channel ID where the bot will post updates.

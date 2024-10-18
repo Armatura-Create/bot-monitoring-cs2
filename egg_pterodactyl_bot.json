@@ -20,7 +20,7 @@
   "file_denylist": [],
   "startup": "npm run start",
   "config": {
-    "files": "{\n    \"config.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"bot_token\" : \"{{env.BOT_TOKEN}}\",\n            \"debug\": \"{{env.DEBUG}}\",\n            \"update_interval\": \"{{env.UPDATE_INTERVAL}}\",\n            \"channel_id\": \"{{env.CHANNEL_ID}}\",\n            \"locale\": \"{{env.LOCALE}}\",\n            \"time_zone\": \"{{env.TIME_ZONE}}\"\n        }\n    }\n}",
+    "files": "{\n    \"config.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"bot_token\" : \"{{env.BOT_TOKEN}}\",\n            \"debug\": \"{{env.DEBUG}}\",\n            \"update_interval\": \"{{env.UPDATE_INTERVAL}}\",\n            \"channel_id\": \"{{env.CHANNEL_ID}}\",\n            \"locale\": \"{{env.LOCALE}}\",\n            \"time_zone\": \"{{env.TIME_ZONE}}\",\n            \"compact\": \"{{env.COMPACT_MODE}}\"\n        }\n    }\n}",
     "startup": "{\n    \"done\": \"Bot is online!\"\n}",
     "logs": "{}",
     "stop": "^C"
@@ -91,6 +91,16 @@
       "user_viewable": true,
       "user_editable": true,
       "rules": "required|string|in:UTC,America\/New_York,America\/Chicago,America\/Denver,America\/Los_Angeles,America\/Toronto,America\/Vancouver,Europe\/London,Europe\/Berlin,Europe\/Paris,Europe\/Moscow,Europe\/Kiev,Asia\/Tokyo,Asia\/Shanghai,Asia\/Singapore,Asia\/Dubai,Asia\/Kolkata,Australia\/Sydney,Australia\/Melbourne,Australia\/Perth,America\/Sao_Paulo,America\/Argentina\/Buenos_Aires,America\/Bogota,Africa\/Johannesburg,Africa\/Cairo,Africa\/Nairobi,Antarctica\/Palmer,Antarctica\/Rothera",
+      "field_type": "text"
+    },
+    {
+      "name": "Compact Mode",
+      "description": "",
+      "env_variable": "COMPACT_MODE",
+      "default_value": "false",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:true,false",
       "field_type": "text"
     }
   ]

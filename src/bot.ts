@@ -25,7 +25,7 @@ export async function sendMessage(client: Client, server: Server, channelId: str
         const combinedData = {...server, ...serverData} as CombinedServer;
         const embed = createEmbed(combinedData);
 
-        let messageId = "";
+        let messageId: string;
 
         if (embed.attachment && embed.components) {
             const message = await channel.send({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
@@ -73,7 +73,7 @@ export async function sendOneMessage(client: Client, servers: Server[], channelI
         const message = await channel.send({embeds: [embed]});
 
         if (message?.id) {
-            typedConfig.one_message_id = message.id;
+            typedConfig.compact_config.message_id = message.id;
             updateConfig(typedConfig);
         }
 
@@ -135,7 +135,7 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
         throw Error('Channel not found');
     }
 
-    if (!typedConfig.one_message_id) {
+    if (!typedConfig.compact_config.message_id) {
         return sendOneMessage(client, servers, channelId);
     }
 
@@ -149,7 +149,7 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
         const embed = createOneEmbed(combinedData);
 
         try {
-            const message = await channel.messages.fetch(typedConfig.one_message_id);
+            const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
             await message.edit({embeds: [embed]});
         } catch (error) {
             log('Error fetching or updating message:', error);

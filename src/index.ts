@@ -32,16 +32,36 @@ function convertBigNumbersAndBooleans(jsonString: string): string {
 }
 
 function updateMissingFields(config: Config): Config {
-    if (!config.type) {
-        config.type = 'individual_messages';
+    if (!config.compact === undefined) {
+        config.compact = false;
     }
 
-    if (!config.one_message_id) {
-        config.one_message_id = '';
+    if (!config.compact_config) {
+        config.compact_config = {};
     }
 
-    if (!config.embed_one_message_color) {
-        config.embed_one_message_color = '#FFFFFF';
+    if (!config.compact_config.footer) {
+        config.compact_config.footer = {};
+    }
+
+    if (!config.compact_config.footer.icon) {
+        config.compact_config.footer.icon = 'https://cdn.patchbot.io/games/11/counter_strike_go_sm.webp';
+    }
+
+    if (!config.compact_config.color) {
+        config.compact_config.color = '#FFFFFF';
+    }
+
+    if (!config.compact_config.image_author) {
+        config.compact_config.image_author = '';
+    }
+
+    if (!config.compact_config.message_id) {
+        config.compact_config.message_id = '';
+    }
+
+    if (!config.update_interval) {
+        config.update_interval = 30;
     }
 
     config.servers.forEach((server: any) => {
@@ -112,7 +132,7 @@ client.once('ready', () => {
         process.exit(1);
     }
 
-    if (typedConfig.type === 'individual_messages') {
+    if (typedConfig.compact) {
         typedConfig.servers.forEach((server, index) => {
             if (!server.message_id) {
                 sendMessage(client, server, typedConfig.channel_id.trim())
@@ -143,7 +163,7 @@ client.once('ready', () => {
             }, interval + index);
         });
     } else {
-        if (!typedConfig.one_message_id) {
+        if (!typedConfig.compact_config.message_id) {
             sendOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
                 .then(() => {
                     log('One message sent');
