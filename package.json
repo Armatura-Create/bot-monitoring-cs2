@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc && cp package.json package-lock.json ./bot && zip -r discord-monitoring-bot.zip ./bot ./map_images config.json",
+    "build:windows": "tsc && if not exist .\\bot\\package.json copy package.json .\\bot && if not exist .\\bot\\package-lock.json copy package-lock.json .\\bot",
     "start": "node index.js",
     "dev": "ts-node src/index.ts"
   },

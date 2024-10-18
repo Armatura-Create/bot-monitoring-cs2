@@ -132,7 +132,7 @@ client.once('ready', () => {
         process.exit(1);
     }
 
-    if (typedConfig.compact) {
+    if (!typedConfig.compact) {
         typedConfig.servers.forEach((server, index) => {
             if (!server.message_id) {
                 sendMessage(client, server, typedConfig.channel_id.trim())
