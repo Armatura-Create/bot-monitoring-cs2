@@ -6,10 +6,8 @@ import {Config} from "./types/Config";
 import path from "path";
 import fs from "fs";
 import {Server} from "./types/Server";
-import {createPlayerStatsEmbed, createServerOnline} from "./embeds/statsPlayers";
-import {clearCache, getCacheData, getOnlineStats} from "./cache/cacheUtil";
-import translate from "./translator/translator";
-import {generateChart} from "./utils/canvasCreate";
+import {clearCache} from "./cache/cacheUtil";
+import {handleInteractions} from "./commands/interactionHandler";
 
 dotenv.config();
 
@@ -70,27 +68,27 @@ function updateMissingFields(config: Config): Config {
         }
 
         if (!server.map_settings) {
-            server.map_settings = { active: false };
+            server.map_settings = {active: false};
         }
 
         if (!server.buttons) {
             server.buttons = {};
         }
         if (!server.buttons.connect) {
-            server.buttons.connect = { active: false, url: '' };
+            server.buttons.connect = {active: false, url: ''};
         }
         if (!server.buttons.players) {
-            server.buttons.players = { active: false };
+            server.buttons.players = {active: false};
         }
         if (!server.buttons.online_stats) {
-            server.buttons.online_stats = { active: false };
+            server.buttons.online_stats = {active: false};
         }
     });
 
     return config;
 }
 
-function readAndUpdateConfigFile(filePath: string) : Config {
+function readAndUpdateConfigFile(filePath: string): Config {
     try {
         let rawData = fs.readFileSync(filePath, 'utf8');
         rawData = convertBigNumbersAndBooleans(rawData);
@@ -115,6 +113,8 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 client.once('ready', () => {
     console.log('Bot is online!');
+
+    handleInteractions(client);
 
     clearCache();
 
@@ -172,7 +172,7 @@ client.once('ready', () => {
                     log(`Error sending one message: ${error}`);
                 });
         } else {
-           updateOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
+            updateOneMessage(client, typedConfig.servers, typedConfig.channel_id.trim())
                 .then(() => {
                     log('One message updated');
                 })
@@ -190,60 +190,6 @@ client.once('ready', () => {
                     log(`Error updating one message: ${error}`);
                 });
         }, interval);
-    }
-});
-
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isButton()) return;
-
-    if (interaction.customId.includes('playerStatsButton')) {
-
-        const ip_port = interaction.customId.split('_')[1];
-
-        const players = getCacheData(ip_port)?.players || [];
-        const serverName = getCacheData(ip_port)?.name || 'Unknown';
-
-        const embed = createPlayerStatsEmbed(players, serverName);
-
-        await interaction.reply({
-            embeds: [embed],
-            ephemeral: true
-        });
-    }
-
-    if (interaction.customId.includes('showOnlineStats')) {
-        const ip_port = interaction.customId.split('_')[1];
-
-        const currentDate = new Intl.DateTimeFormat(typedConfig.locale, {
-            timeZone: typedConfig.time_zone,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }).format(new Date());
-
-        const stats = getOnlineStats(ip_port, currentDate);
-        const serverName = getCacheData(ip_port)?.name || translate('title_stats');
-
-        if (stats && Object.keys(stats).length > 0) {
-            generateChart(stats)
-                .then(image => {
-
-                    let serverOnline = createServerOnline(serverName, image);
-
-                    interaction.reply(
-                        {
-                            embeds: [serverOnline.embed],
-                            files: [serverOnline.attachment],
-                            ephemeral: true
-                        }
-                    );
-                })
-                .catch(() => {
-                    interaction.reply({content: translate('error_stats'), ephemeral: true});
-                })
-        } else {
-            await interaction.reply({content: translate('not_found_stats'), ephemeral: true});
-        }
     }
 });
 

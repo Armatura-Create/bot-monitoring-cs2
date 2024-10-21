@@ -68,11 +68,12 @@ export function updateCacheLastAttachmentMaps(ip_port: string, map: string): voi
 
 function updateOnlineStats(serverIp: string, currentPlayers: number) {
     const now = new Date();
+
     const currentHour = new Intl.DateTimeFormat(typedConfig.locale, {
         timeZone: typedConfig.time_zone,
         hour: '2-digit',
         hour12: false,
-    }).format(now);
+    }).format(now).replace('24', '0');
 
     const currentDate = new Intl.DateTimeFormat(typedConfig.locale, {
         timeZone: typedConfig.time_zone,
@@ -89,16 +90,30 @@ function updateOnlineStats(serverIp: string, currentPlayers: number) {
 
     if (!cache[serverIp][currentDate]) {
         cache[serverIp][currentDate] = {};
+        for (let hour = 0; hour < 24; hour++) {
+            const hourKey = String(hour);
+            cache[serverIp][currentDate][hourKey] = 0;
+        }
     }
 
     const currentMaxOnline = cache[serverIp][currentDate][currentHour] || 0;
-
     if (currentPlayers >= currentMaxOnline) {
         cache[serverIp][currentDate][currentHour] = currentPlayers;
     }
 
+    const daysToKeep = 7;
+    const allDates = Object.keys(cache[serverIp]);
+    if (allDates.length > daysToKeep) {
+        const sortedDates = allDates.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+        const oldDates = sortedDates.slice(0, sortedDates.length - daysToKeep);
+        oldDates.forEach(oldDate => {
+            delete cache[serverIp][oldDate];
+        });
+    }
+
     fs.writeFileSync(cacheOnlineStats, JSON.stringify(cache, null, 4), 'utf-8');
 }
+
 
 export function getOnlineStats(serverIp: string, date: string): { [key: string]: number } {
     const cache = loadCacheOnlineStats();
@@ -107,7 +122,7 @@ export function getOnlineStats(serverIp: string, date: string): { [key: string]:
     const sortedStats = Object.keys(stats)
         .sort((a, b) => Number(a) - Number(b))
         .reduce((acc, key) => {
-            acc[key] = stats[key];
+            acc[Number(key)] = stats[key];
             return acc;
         }, {} as { [key: string]: number });
 
