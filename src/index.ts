@@ -32,7 +32,7 @@ function convertBigNumbersAndBooleans(jsonString: string): string {
 }
 
 function updateMissingFields(config: Config): Config {
-    if (!config.compact === undefined) {
+    if (!config.hasOwnProperty('compact')) {
         config.compact = false;
     }
 
