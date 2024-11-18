@@ -6,6 +6,8 @@ import {Server} from "./types/Server";
 import {CombinedServer} from "./types/ServerDto";
 import {typedConfig} from "./index";
 
+const maxRetries = 10;
+
 export async function sendMessage(client: Client, server: Server, channelId: string): Promise<void> {
 
     if (!channelId) {
@@ -101,23 +103,38 @@ export async function updateMessage(client: Client, server: Server, channelId: s
     const serverData = await getServerData(server);
 
     if (serverData) {
-        try {
-            const message = await channel.messages.fetch(server.message_id);
-            const combinedData = {...server, ...serverData} as CombinedServer;
-            const embed = createEmbed(combinedData);
 
-            if (embed.attachment && embed.components) {
-                await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
-            } else if (embed.attachment) {
-                await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment]});
-            } else if (embed.components) {
-                await message.edit({embeds: [embed.embedBuilder], components: [embed.components]});
-            } else {
-                await message.edit({embeds: [embed.embedBuilder]});
+        let attempt = 0;
+        let success = false;
+
+        while (attempt < maxRetries) {
+            try {
+                const message = await channel.messages.fetch(server.message_id);
+                const combinedData = {...server, ...serverData} as CombinedServer;
+                const embed = createEmbed(combinedData);
+
+                if (embed.attachment && embed.components) {
+                    await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment], components: [embed.components]});
+                } else if (embed.attachment) {
+                    await message.edit({embeds: [embed.embedBuilder], files: [embed.attachment]});
+                } else if (embed.components) {
+                    await message.edit({embeds: [embed.embedBuilder], components: [embed.components]});
+                } else {
+                    await message.edit({embeds: [embed.embedBuilder]});
+                }
+
+            } catch (error) {
+                log('Error fetching or updating message:', error);
             }
 
-        } catch (error) {
-            log('Error fetching or updating message:', error);
+            attempt++;
+            if (attempt < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, 4000));
+            }
+        }
+
+        if (!success) {
+            log('Failed to update message send New Message');
             return sendMessage(client, server, channelId);
         }
     } else {
@@ -148,13 +165,29 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
 
         const embed = createOneEmbed(combinedData);
 
-        try {
-            const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
-            await message.edit({embeds: [embed]});
-        } catch (error) {
-            log('Error fetching or updating message:', error);
+        let attempt = 0;
+        let success = false;
+
+        while (attempt < maxRetries) {
+
+            try {
+                const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
+                await message.edit({embeds: [embed]});
+            } catch (error) {
+                log('Error fetching or updating message:', error);
+            }
+
+            attempt++;
+            if (attempt < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, 4000));
+            }
+        }
+
+        if (!success) {
+            log('Failed to update message send New Message');
             return sendOneMessage(client, servers, channelId);
         }
+
     } else {
         log('Server is not available and not found cache data');
     }

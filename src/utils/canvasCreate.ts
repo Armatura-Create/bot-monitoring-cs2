@@ -17,7 +17,7 @@ export async function generateChart(stats: { [key: string]: number }): Promise<B
             labels: labels,
             datasets: [
                 {
-                    label: translate('count_layers'),
+                    label: translate('count_players'),
                     data: data,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',

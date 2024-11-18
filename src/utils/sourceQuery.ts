@@ -4,7 +4,6 @@ import {log} from "./utils";
 import {getCacheData, updateCache} from "../cache/cacheUtil";
 import {Server} from "../types/Server";
 
-// Функция для запроса данных о сервере
 export async function getServerData(server: Server): Promise<ServerDto> {
 
     const [ip, port] = server.ip_port.split(':');
