@@ -96,52 +96,52 @@ sudo systemctl status cs2-monitoring-bot
 
 ```json
 {
-    "debug": true,
-    "bot_token": "",
-    "update_interval": 60,
-      "compact_config": {
-        "message_id": "",
-        "color": "#FFFFFF",
-        "image_author": "",
-        "footer": {
-          "icon": ""
-        }
+  "debug": true,
+  "bot_token": "",
+  "update_interval": 60,
+  "compact_config": {
+    "message_id": "",
+    "color": "#FFFFFF",
+    "image_author": "",
+    "footer": {
+      "icon": ""
+    }
+  },
+  "use_plugin": false,
+  "locale": "en-US",
+  "channel_id": "",
+  "time_zone": "UTC",
+  "servers": [
+    {
+      "server_name": "Server Name",
+      "url": "https://site.com/",
+      "message_id": "",
+      "color": "#FFFFFF",
+      "ip_port": "127.0.0.1:27015",
+      "image_author": "",
+      "image_thumbnail": "",
+      "show_status": true,
+      "map_settings": {
+        "active": false,
+        "image": ""
       },
-    "use_plugin": false,
-    "locale": "en-US",
-    "channel_id": "",
-    "time_zone": "UTC",
-    "servers": [
-        {
-            "server_name": "Server Name",
-            "url": "https://site.com/",
-            "message_id": "",
-            "color": "#FFFFFF",
-            "ip_port": "127.0.0.1:27015",
-            "image_author": "",
-            "image_thumbnail": "",
-            "show_status": true,
-            "map_settings": {
-                "active": false,
-                "image": ""
-            },
-            "footer": {
-                "icon": ""
-            },
-            "buttons": {
-                "connect": {
-                    "active": false,
-                    "url": "https://site.com/"
-                },
-                "players": {
-                    "active": false
-                },
-                "online_stats": {
-                    "active": false
-                }
-            }
+      "footer": {
+        "icon": ""
+      },
+      "buttons": {
+        "connect": {
+          "active": false,
+          "url": "https://site.com/"
+        },
+        "players": {
+          "active": false
+        },
+        "online_stats": {
+          "active": false
         }
-    ]
+      }
+    }
+  ]
 }
 ```
 

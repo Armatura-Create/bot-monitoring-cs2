@@ -2,12 +2,11 @@
   "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
   "meta": {
     "version": "PTDL_v2",
-    "update_url": "https:\/\/github.com\/Armatura-Create\/bot-monitoring-cs2\/blob\/main\/egg_pelican_bot.json"
+    "update_url": "https:\/\/raw.githubusercontent.com\/Armatura-Create\/bot-monitoring-cs2\/refs\/heads\/main\/egg_pelican_bot.json"
   },
   "exported_at": "2024-10-18T15:12:46+03:00",
   "name": "Discord Monitoring BOT",
   "author": "alext303@gmail.com",
-  "uuid": "e7d8d8d6-3a93-4dd2-b278-900a0a0c9dc1",
   "description": "Discord monitoring Counter Strike 2",
   "features": [
     "Monitoring",

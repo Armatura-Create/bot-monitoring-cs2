@@ -1,8 +1,8 @@
 <div align="center">
 
-  [<kbd><br>🌐 Русский README<br><br></kbd>](./README_RU.md)
-  
-  [<kbd><br>🌐 English README<br><br></kbd>](./README.md)
+[<kbd><br>🌐 Русский README<br><br></kbd>](./README_RU.md)
+
+[<kbd><br>🌐 English README<br><br></kbd>](./README.md)
 
 </div>
 
@@ -15,7 +15,7 @@
 
 # Discord Monitoring Bot for CS2
 
- This bot allows monitoring of multiple game servers, providing information about the server status, map, and players. It also allows for flexible configuration of the bot's appearance and behavior, including map images and online player stats.
+This bot allows monitoring of multiple game servers, providing information about the server status, map, and players. It also allows for flexible configuration of the bot's appearance and behavior, including map images and online player stats.
 
 <hr />
 
@@ -34,7 +34,7 @@
 
 ## Installation via Systemd
 
-### Download the latest release from the [releases page](https://github.com/Armatura-Create/bot-monitoring-cs2/releases): 
+### Download the latest release from the [releases page](https://github.com/Armatura-Create/bot-monitoring-cs2/releases):
 ```bash
 cd /path/to/your/bot
 wget https://github.com/Armatura-Create/bot-monitoring-cs2/releases/latest/download/discord-monitoring-bot.zip
@@ -96,53 +96,53 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
 
 ```json
 {
-    "debug": true,
-    "bot_token": "",
-    "update_interval": 60,
-    "compact": false,
-    "compact_config": {
+  "debug": true,
+  "bot_token": "",
+  "update_interval": 60,
+  "compact": false,
+  "compact_config": {
+    "message_id": "",
+    "color": "#FFFFFF",
+    "image_author": "",
+    "footer": {
+      "icon": ""
+    }
+  },
+  "use_plugin": false,
+  "locale": "en-US",
+  "channel_id": "",
+  "time_zone": "UTC",
+  "servers": [
+    {
+      "server_name": "Server Name",
+      "url": "https://site.com/",
       "message_id": "",
       "color": "#FFFFFF",
+      "ip_port": "127.0.0.1:27015",
       "image_author": "",
+      "image_thumbnail": "",
+      "show_status": true,
+      "map_settings": {
+        "active": false,
+        "image": ""
+      },
       "footer": {
         "icon": ""
-      }
-    },
-    "use_plugin": false,
-    "locale": "en-US",
-    "channel_id": "",
-    "time_zone": "UTC",
-    "servers": [
-        {
-            "server_name": "Server Name",
-            "url": "https://site.com/",
-            "message_id": "",
-            "color": "#FFFFFF",
-            "ip_port": "127.0.0.1:27015",
-            "image_author": "",
-            "image_thumbnail": "",
-            "show_status": true,           
-            "map_settings": {
-                "active": false,
-                "image": ""
-            },
-            "footer": {
-                "icon": ""
-            },
-            "buttons": {
-                "connect": {
-                    "active": false,
-                    "url": "https://site.com/"
-                },
-                "players": {
-                    "active": false
-                },
-                "online_stats": {
-                    "active": false
-                }
-            }
+      },
+      "buttons": {
+        "connect": {
+          "active": false,
+          "url": "https://site.com/"
+        },
+        "players": {
+          "active": false
+        },
+        "online_stats": {
+          "active": false
         }
-    ]
+      }
+    }
+  ]
 }
 ```
 
