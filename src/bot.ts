@@ -122,7 +122,8 @@ export async function updateMessage(client: Client, server: Server, channelId: s
                 } else {
                     await message.edit({embeds: [embed.embedBuilder]});
                 }
-
+                success = true;
+                break;
             } catch (error) {
                 log('Error fetching or updating message:', error);
             }
@@ -173,6 +174,8 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
             try {
                 const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
                 await message.edit({embeds: [embed]});
+                success = true;
+                break;
             } catch (error) {
                 log('Error fetching or updating message:', error);
             }
