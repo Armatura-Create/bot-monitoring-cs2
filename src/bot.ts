@@ -136,7 +136,11 @@ export async function updateMessage(client: Client, server: Server, channelId: s
 
         if (!success) {
             log('Failed to update message send New Message');
-            return sendMessage(client, server, channelId);
+            if (typedConfig.send_new_message_if_failed) {
+                return sendMessage(client, server, channelId);
+            } else {
+                log('Send new message is disabled');
+            }
         }
     } else {
         log('Server is not available and not found cache data');
@@ -188,7 +192,11 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
 
         if (!success) {
             log('Failed to update message send New Message');
-            return sendOneMessage(client, servers, channelId);
+            if (typedConfig.send_new_message_if_failed) {
+                return sendOneMessage(client, servers, channelId);
+            } else {
+                log('Send new message is disabled');
+            }
         }
 
     } else {

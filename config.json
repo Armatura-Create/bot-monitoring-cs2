@@ -1,6 +1,7 @@
 {
     "debug": true,
     "compact": false,
+    "send_new_message_if_failed": false,
     "compact_config": {
         "message_id": "",
         "color": "#FFFFFF",

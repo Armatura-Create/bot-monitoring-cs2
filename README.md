@@ -152,6 +152,7 @@ Below is a sample configuration that allows you to monitor multiple servers, cus
 - ```bot_token```: Your Discord bot token.
 - ```update_interval```: Time in seconds between server status updates.
 - ```compact```: Enables compact mode (true or false).
+- ```send_new_message_if_failed```: Send new message if fail response update message from Discord (true or false).
 - ```compact_config```: Configuration for compact mode.
   - ```message_id```: The ID of the message where server updates are posted (if not set - generate auto).
   - ```color```: The color of the embed message.

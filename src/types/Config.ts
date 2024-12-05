@@ -2,6 +2,7 @@ import {Server} from "./Server";
 
 export interface Config {
     compact: boolean;
+    send_new_message_if_failed: boolean;
     compact_config: {
         message_id?: string;
         color?: string;

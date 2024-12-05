@@ -34,6 +34,10 @@ function updateMissingFields(config: Config): Config {
         config.compact = false;
     }
 
+    if (!config.hasOwnProperty('send_new_message_if_failed')) {
+        config.send_new_message_if_failed = false;
+    }
+
     if (!config.compact_config) {
         config.compact_config = {};
     }
