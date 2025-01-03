@@ -2,6 +2,12 @@
 
 cd /home/container
 
+exit_handler() {
+    log_message "Stopping all processes..." "running"
+    pkill -P $$  # Убиваем все дочерние процессы
+    exit 0
+}
+
 trap 'exit_handler' SIGINT SIGTERM
 
 RED='\033[0;31m'
@@ -44,12 +50,6 @@ CONFIG_FILE="config.json"
 TEMP_DIR="tmp/"
 TEMP_DIR_UPDATE="tmp/bot_update"
 ARCHIVE_NAME="discord-monitoring-bot.zip"
-
-exit_handler() {
-    log_message "Stopping all processes..." "running"
-    pkill -P $$  # Убиваем все дочерние процессы
-    exit 0
-}
 
 check_dependencies() {
     log_message "Checking dependencies..." "running"
@@ -178,4 +178,9 @@ fi
 
 log_message "Starting the bot..." "running"
 cd bot
-exec npm run start
+
+# Запускаем npm без exec, чтобы можно было обработать сигнал в родительском процессе
+npm run start &  # Запускаем в фоне
+
+# Ожидание завершения процесса
+wait $!
