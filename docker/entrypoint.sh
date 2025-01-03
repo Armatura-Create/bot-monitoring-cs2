@@ -2,7 +2,7 @@
 
 cd /home/container
 
-sleep 1
+trap 'exit_handler' SIGINT SIGTERM
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -45,6 +45,22 @@ TEMP_DIR="tmp/"
 TEMP_DIR_UPDATE="tmp/bot_update"
 ARCHIVE_NAME="discord-monitoring-bot.zip"
 
+exit_handler() {
+    log_message "Stopping all processes..." "running"
+    pkill -P $$  # Убиваем все дочерние процессы
+    exit 0
+}
+
+check_dependencies() {
+    log_message "Checking dependencies..." "running"
+    for cmd in curl unzip npm; do
+        if ! command -v $cmd &>/dev/null; then
+            log_message "Error: $cmd is not installed. Please install it first." "error"
+            exit 1
+        fi
+    done
+}
+
 download_archive() {
     log_message "Downloading the latest release..." "running"
     if ! curl -L "$RELEASE_URL" -o "$ARCHIVE_NAME"; then
@@ -60,7 +76,10 @@ unpack_archive() {
         mkdir -p "$TEMP_DIR_UPDATE"
     fi
 
-    unzip -o "$ARCHIVE_NAME" -d "$TEMP_DIR_UPDATE"
+    if ! unzip -o "$ARCHIVE_NAME" -d "$TEMP_DIR_UPDATE"; then
+        log_message "Failed to unpack the archive." "error"
+        exit 1
+    fi
 }
 
 move_to_install_dir() {
@@ -78,7 +97,10 @@ move_to_install_dir() {
 install_dependencies() {
     log_message "Installing dependencies..." "running"
     cd bot
-    npm install --production
+    if ! npm install --production; then
+        log_message "Failed to install dependencies." "error"
+        exit 1
+    fi
     cd ..
 }
 
@@ -132,6 +154,8 @@ check_version() {
         return 0
     fi
 }
+
+check_dependencies
 
 if check_version; then
     save_config
