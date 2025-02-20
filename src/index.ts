@@ -37,7 +37,7 @@ function updateMissingFields(config: Config): Config {
     if (!config.hasOwnProperty('send_new_message_if_failed')) {
         config.send_new_message_if_failed = false;
     }
-
+    
     if (!config.compact_config) {
         config.compact_config = {};
     }
@@ -60,6 +60,10 @@ function updateMissingFields(config: Config): Config {
 
     if (!config.compact_config.message_id) {
         config.compact_config.message_id = '';
+    }
+
+    if (!config.compact_config.hasOwnProperty('show_select_server') || config.compact_config.show_select_server === undefined) {
+        config.compact_config.show_select_server = true;
     }
 
     if (!config.update_interval) {

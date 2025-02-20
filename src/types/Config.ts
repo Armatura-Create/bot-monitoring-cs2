@@ -4,6 +4,7 @@ export interface Config {
     compact: boolean;
     send_new_message_if_failed: boolean;
     compact_config: {
+        show_select_server?: boolean,
         message_id?: string;
         color?: string;
         image_author?: string;

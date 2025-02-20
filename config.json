@@ -3,6 +3,7 @@
     "compact": false,
     "send_new_message_if_failed": false,
     "compact_config": {
+        "show_select_server": true,
         "message_id": "",
         "color": "#FFFFFF",
         "image_author": "",

@@ -5,6 +5,7 @@ import {getServerData} from './utils/sourceQuery';
 import {Server} from "./types/Server";
 import {CombinedServer} from "./types/ServerDto";
 import {typedConfig} from "./index";
+import translate from "./translator/translator"
 
 const maxRetries = 10;
 
@@ -72,15 +73,21 @@ export async function sendOneMessage(client: Client, servers: Server[], channelI
 
         const embed = createOneEmbed(combinedData);
 
-        const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('selectServer')
-                    .setLabel('Select server')
-                    .setStyle(ButtonStyle.Primary)
-            );
+        let message;
+        
+        if (typedConfig.compact_config.show_select_server) {
+            const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('selectServer')
+                        .setLabel(translate('select_server'))
+                        .setStyle(ButtonStyle.Primary)
+                );
 
-        const message = await channel.send({embeds: [embed], components: [selectServerButton]});
+            message = await channel.send({embeds: [embed], components: [selectServerButton]});
+        } else {
+            message = await channel.send({embeds: [embed]});
+        }
 
         if (message?.id) {
             typedConfig.compact_config.message_id = message.id;
@@ -186,15 +193,19 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
             try {
                 const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
 
-                const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('selectServer')
-                            .setLabel('Select server')
-                            .setStyle(ButtonStyle.Primary)
-                    );
+                if (typedConfig.compact_config.show_select_server) {
+                    const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('selectServer')
+                                .setLabel(translate('select_server'))
+                                .setStyle(ButtonStyle.Primary)
+                        );
 
-                await message.edit({embeds: [embed], components: [selectServerButton]});
+                    await message.edit({embeds: [embed], components: [selectServerButton]});
+                } else {
+                    await message.edit({embeds: [embed]});
+                }
                 success = true;
                 break;
             } catch (error) {

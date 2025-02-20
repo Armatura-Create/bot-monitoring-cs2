@@ -10,18 +10,42 @@ export function handleInteractions(client: Client) {
 
         if (interaction.isStringSelectMenu() && interaction.customId === 'serverSelect') {
             const ip_port = interaction.values[0];
+            
+            let find = typedConfig.servers.find(server => server.ip_port === ip_port);
+            
+            if (!find || (find.buttons?.connect?.active === false && find.buttons?.players?.active === false && find.buttons?.online_stats?.active === false)) {
+                await interaction.reply({content: translate('not_available_servers'), flags: MessageFlags.Ephemeral});
+                return;
+            }
+            
+            const buttons = new ActionRowBuilder<ButtonBuilder>();
+            
+            if (find.buttons?.connect?.active) {
+                const connectButton = new ButtonBuilder()
+                    .setLabel(translate('connect'))
+                    .setStyle(ButtonStyle.Link)
+                    .setURL(find.buttons.connect.url);
+                buttons.addComponents(connectButton);
+            }
 
-            const buttons = new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`playerStatsButton_${ip_port}`)
-                        .setLabel(translate('players_stats'))
-                        .setStyle(ButtonStyle.Primary),
+            if (find.buttons?.players?.active && (getCacheData(ip_port)?.players || []).length > 0) {
+                const playersButton = new ButtonBuilder()
+                    .setCustomId(`playerStatsButton_${ip_port}`)
+                    .setLabel(translate('players_stats'))
+                    .setStyle(ButtonStyle.Primary)
+
+                buttons.addComponents(playersButton);
+            }
+
+            if (find.buttons?.online_stats?.active) {
+                const onlineStatsButton =
                     new ButtonBuilder()
                         .setCustomId(`showOnlineStats_${ip_port}`)
                         .setLabel(translate('show_online_stats'))
-                        .setStyle(ButtonStyle.Primary)
-                );
+                        .setStyle(ButtonStyle.Primary);
+                buttons.addComponents(onlineStatsButton);
+            }
+            
 
             await interaction.deferReply({flags: MessageFlags.Ephemeral});
             await interaction.editReply({

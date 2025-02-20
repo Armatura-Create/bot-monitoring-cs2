@@ -1,6 +1,6 @@
 {
   "name": "bot-discord-monitoring-cs2",
-  "version": "1.0.13",
+  "version": "1.0.13fix",
   "main": "src/index.js",
   "scripts": {
     "build": "tsc && cp package.json package-lock.json ./bot && zip -r discord-monitoring-bot.zip ./bot ./map_images config.json",
