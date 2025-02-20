@@ -1,4 +1,4 @@
-import {Client, TextChannel} from 'discord.js';
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, Client, TextChannel} from 'discord.js';
 import {createEmbed, createOneEmbed} from './embeds/monitor';
 import {log, updateConfig, updateConfig_Server} from './utils/utils';
 import {getServerData} from './utils/sourceQuery';
@@ -72,7 +72,15 @@ export async function sendOneMessage(client: Client, servers: Server[], channelI
 
         const embed = createOneEmbed(combinedData);
 
-        const message = await channel.send({embeds: [embed]});
+        const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('selectServer')
+                    .setLabel('Select server')
+                    .setStyle(ButtonStyle.Primary)
+            );
+
+        const message = await channel.send({embeds: [embed], components: [selectServerButton]});
 
         if (message?.id) {
             typedConfig.compact_config.message_id = message.id;
@@ -177,7 +185,16 @@ export async function updateOneMessage(client: Client, servers: Server[], channe
 
             try {
                 const message = await channel.messages.fetch(typedConfig.compact_config.message_id);
-                await message.edit({embeds: [embed]});
+
+                const selectServerButton = new ActionRowBuilder<ButtonBuilder>()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('selectServer')
+                            .setLabel('Select server')
+                            .setStyle(ButtonStyle.Primary)
+                    );
+
+                await message.edit({embeds: [embed], components: [selectServerButton]});
                 success = true;
                 break;
             } catch (error) {

@@ -13,7 +13,12 @@
     "not_found_stats": "No stats available for today.",
     "error_stats": "Error getting stats.",
     "connect": "Connect",
-    "last_update": "Last update"
+    "last_update": "Last update",
+    "select_server": "Select server",
+    "selected_server": "Selected server",
+    "select_action": "Select action",
+    "not_available_servers": "No servers available.",
+    "select_server_for_stats": "Select server for stats:"
   },
   "ru-RU": {
     "status": "Статус",
@@ -29,7 +34,12 @@
     "not_found_stats": "Статистика за сегодня отсутствует.",
     "error_stats": "Ошибка получения статистики.",
     "connect": "Подключиться",
-    "last_update": "Последнее обновление"
+    "last_update": "Последнее обновление",
+    "select_server": "Выберите сервер",
+    "selected_server": "Выбран сервер",
+    "select_action": "Выберите действие",
+    "not_available_servers": "Серверы недоступны.",
+    "select_server_for_stats": "Выберите сервер для просмотра статистики:"
   },
   "uk-UA": {
     "status": "Статус",
@@ -45,6 +55,11 @@
     "not_found_stats": "Статистика за сьогодні відсутня.",
     "error_stats": "Помилка отримання статистики.",
     "connect": "Підключитися",
-    "last_update": "Останнє оновлення"
+    "last_update": "Останнє оновлення",
+    "select_server": "Виберіть сервер",
+    "selected_server": "Обраний сервер",
+    "select_action": "Виберіть дію",
+    "not_available_servers": "Сервери недоступні.",
+    "select_server_for_stats": "Виберіть сервер для перегляду статистики:"
   }
 }

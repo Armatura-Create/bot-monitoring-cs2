@@ -118,8 +118,12 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 client.once('ready', () => {
     console.log('Bot is online!');
 
-    handleInteractions(client);
-
+    try {
+        handleInteractions(client);
+    } catch (error) {
+        console.error('Error handling interactions:', error);
+    }
+    
     clearCache();
 
     if (Array.isArray(typedConfig.servers) && typedConfig.servers.length > 0) {
