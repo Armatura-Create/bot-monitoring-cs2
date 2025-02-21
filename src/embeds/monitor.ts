@@ -164,7 +164,7 @@ export function createOneEmbed(servers: CombinedServer[]): EmbedBuilder {
 
         if (index > 0) {
             fields.push({
-                name: `**----**`,
+                name: `**----------------------------------**`,
                 value: ` `,
                 inline: false
             });

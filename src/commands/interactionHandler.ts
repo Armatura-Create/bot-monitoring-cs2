@@ -10,16 +10,16 @@ export function handleInteractions(client: Client) {
 
         if (interaction.isStringSelectMenu() && interaction.customId === 'serverSelect') {
             const ip_port = interaction.values[0];
-            
+
             let find = typedConfig.servers.find(server => server.ip_port === ip_port);
-            
+
             if (!find || (find.buttons?.connect?.active === false && find.buttons?.players?.active === false && find.buttons?.online_stats?.active === false)) {
                 await interaction.reply({content: translate('not_available_servers'), flags: MessageFlags.Ephemeral});
                 return;
             }
-            
+
             const buttons = new ActionRowBuilder<ButtonBuilder>();
-            
+
             if (find.buttons?.connect?.active) {
                 const connectButton = new ButtonBuilder()
                     .setLabel(translate('connect'))
@@ -45,7 +45,7 @@ export function handleInteractions(client: Client) {
                         .setStyle(ButtonStyle.Primary);
                 buttons.addComponents(onlineStatsButton);
             }
-            
+
 
             await interaction.deferReply({flags: MessageFlags.Ephemeral});
             await interaction.editReply({
@@ -95,17 +95,24 @@ export function handleInteractions(client: Client) {
             });
         }
 
-        if (interaction.isButton() && interaction.customId.startsWith('showOnlineStats')) {
+        if (interaction.customId.startsWith('showOnlineStats')) {
             const ip_port = interaction.customId.split('_')[1];
 
-            const stats = getOnlineStats(ip_port, new Date().toISOString().split('T')[0]);
+            const currentDate = new Intl.DateTimeFormat(typedConfig.locale, {
+                timeZone: typedConfig.time_zone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(new Date());
+
+            const stats = getOnlineStats(ip_port, currentDate);
             const serverName = getCacheData(ip_port)?.name || translate('title_stats');
 
             await interaction.deferReply({flags: MessageFlags.Ephemeral});
 
             if (stats && Object.keys(stats).length > 0) {
                 try {
-                    const image = await generateChart(stats);
+                    const image = await generateChart(serverName, stats);
                     const serverOnline = createServerOnline(serverName, image);
 
                     await interaction.editReply({

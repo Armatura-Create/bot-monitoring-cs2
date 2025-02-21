@@ -23,3 +23,4 @@ config_dev.json
 /src/cache/cache_online_stats.json
 bot/
 discord-monitoring-bot.zip
+src/utils/chart_debug*

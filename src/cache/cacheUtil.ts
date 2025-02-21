@@ -119,10 +119,18 @@ export function getOnlineStats(serverIp: string, date: string): { [key: string]:
     const cache = loadCacheOnlineStats();
     const stats = cache[serverIp]?.[date] || {};
 
+    const currentHour = new Date().toLocaleString(typedConfig.locale, {
+        timeZone: typedConfig.time_zone,
+        hour: "2-digit",
+        hourCycle: "h23"
+    });
+
     const sortedStats = Object.keys(stats)
-        .sort((a, b) => Number(a) - Number(b))
+        .map(Number)
+        .filter(hour => hour <= Number(currentHour))
+        .sort((a, b) => a - b)
         .reduce((acc, key) => {
-            acc[Number(key)] = stats[key];
+            acc[key] = stats[key];
             return acc;
         }, {} as { [key: string]: number });
 
