@@ -161,18 +161,10 @@ export function createOneEmbed(servers: CombinedServer[]): EmbedBuilder {
         if (!server.players) {
             log('Players is not defined');
         }
-
-        if (index > 0) {
-            fields.push({
-                name: `**----------------------------------**`,
-                value: ` `,
-                inline: false
-            });
-        }
-
+        
         fields.push({
             name: `**${translate('server')}**`,
-            value: `\`\`\`fix\n${server.name + (!server.show_status && server.status === 'OFFLINE' ? ` (${server.status})` : '')}\`\`\``,
+            value: `\`\`\`\n${(server.status === 'OFFLINE' ? ` [${server.status}]` : server.name)}\`\`\``,
             inline: false
         });
 
@@ -192,7 +184,7 @@ export function createOneEmbed(servers: CombinedServer[]): EmbedBuilder {
             },
             {
                 name: `**${translate('players')}**`,
-                value: `\`\`\`ml\n${!server.show_status && server.status === 'OFFLINE' ? '-' : server.players.length} / ${server.maxPlayers} \`\`\``,
+                value: `\`\`\`ml\n${server.status === 'OFFLINE' ? 'OFFLINE' : server.players.length} / ${server.status === 'OFFLINE' ? 'OFFLINE' : server.maxPlayers} \`\`\``,
                 inline: true
             },
             {

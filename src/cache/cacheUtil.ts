@@ -67,7 +67,7 @@ export function updateCacheLastAttachmentMaps(ip_port: string, map: string): voi
 }
 
 function updateOnlineStats(serverIp: string, currentPlayers: number) {
-    const now = new Date();
+    const now = new Date("2025-02-27T06:40:58.586Z");
 
     const currentHour = new Intl.DateTimeFormat(typedConfig.locale, {
         timeZone: typedConfig.time_zone,
@@ -96,9 +96,9 @@ function updateOnlineStats(serverIp: string, currentPlayers: number) {
         }
     }
 
-    const currentMaxOnline = cache[serverIp][currentDate][currentHour] || 0;
+    const currentMaxOnline = cache[serverIp][currentDate][parseInt(currentHour)] || 0;
     if (currentPlayers >= currentMaxOnline) {
-        cache[serverIp][currentDate][currentHour] = currentPlayers;
+        cache[serverIp][currentDate][parseInt(currentHour)] = currentPlayers;
     }
 
     const daysToKeep = 7;
@@ -119,11 +119,13 @@ export function getOnlineStats(serverIp: string, date: string): { [key: string]:
     const cache = loadCacheOnlineStats();
     const stats = cache[serverIp]?.[date] || {};
 
-    const currentHour = new Date().toLocaleString(typedConfig.locale, {
+    const now = new Date();
+    
+    const currentHour = new Intl.DateTimeFormat(typedConfig.locale, {
         timeZone: typedConfig.time_zone,
-        hour: "2-digit",
-        hourCycle: "h23"
-    });
+        hour: '2-digit',
+        hour12: false,
+    }).format(now).replace('24', '0');
 
     const sortedStats = Object.keys(stats)
         .map(Number)
